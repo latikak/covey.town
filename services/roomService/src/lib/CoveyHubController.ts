@@ -47,7 +47,7 @@ export default class CoveyHubController {
   }
 
   get coveyHubID(): string {
-    return this.coveyHubID;
+    return this._coveyHubID;
   }
 
   /** The list of players currently in the town * */
