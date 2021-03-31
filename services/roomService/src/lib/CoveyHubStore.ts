@@ -1,4 +1,4 @@
-import { CoveyHubList } from '../CoveyTypes';
+import { CoveyTownList } from '../CoveyTypes';
 import CoveyHubController from './CoveyHubController';
 
 function passwordMatches(provided: string, expected: string): boolean {
@@ -27,10 +27,10 @@ export default class CoveyHubStore {
     return this._hubs.find(hub => hub.coveyHubID === coveyHubID);
   }
 
-  getHubs(): CoveyHubList {
+  getHubs(): CoveyTownList {
     return this._hubs.filter(hubController => hubController.isPubliclyListed)
       .map(hubController => ({
-        coveyHubID: hubController.coveyHubID,
+        coveyTownID: hubController.coveyHubID,
         friendlyName: hubController.friendlyName,
         currentOccupancy: hubController.occupancy,
         maximumOccupancy: hubController.capacity,
