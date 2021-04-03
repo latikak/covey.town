@@ -50,6 +50,7 @@ export interface TownCreateRequest {
 export interface TownCreateResponse {
   coveyTownID: string;
   coveyTownPassword: string;
+  hubs: CoveyHubInfo[];
 }
 
 /**
@@ -63,7 +64,7 @@ export interface TownListResponse {
  * Response from the server for a Hub list request
  */
 export interface HubListResponse {
-  towns: CoveyHubInfo[];
+  hubs: CoveyHubInfo[];
 }
 
 /**
@@ -74,6 +75,9 @@ export interface TownDeleteRequest {
   coveyTownPassword: string;
 }
 
+export interface HubListRequest{
+  coveyTownID: string;
+}
 /**
  * Payload sent by the client to update a Town.
  * N.B., JavaScript is terrible, so:
@@ -154,8 +158,8 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
-  async listHubs(): Promise<HubListResponse> {
-    const responseWrapper = await this._axios.get<ResponseEnvelope<HubListResponse>>('/hubs');
+  async listHubs(requestData: HubListRequest): Promise<HubListResponse> {
+    const responseWrapper = await this._axios.get<ResponseEnvelope<HubListResponse>>(`/towns/${requestData.coveyTownID}/hubs`);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 

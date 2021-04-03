@@ -5,12 +5,13 @@ import { nanoid } from 'nanoid';
 import assert from 'assert';
 import { AddressInfo } from 'net';
 
-import TownsServiceClient, { TownListResponse } from './TownsServiceClient';
+import TownsServiceClient, { CoveyHubInfo, TownListResponse } from './TownsServiceClient';
 import addTownRoutes from '../router/towns';
 
 type TestTownData = {
   friendlyName: string, coveyTownID: string,
-  isPubliclyListed: boolean, townUpdatePassword: string
+  isPubliclyListed: boolean, townUpdatePassword: string,
+  hubs: CoveyHubInfo[]
 };
 
 function expectTownListMatches(towns: TownListResponse, town: TestTownData) {
@@ -43,6 +44,8 @@ describe('TownsServiceAPIREST', () => {
       isPubliclyListed: isPublic,
       coveyTownID: ret.coveyTownID,
       townUpdatePassword: ret.coveyTownPassword,
+      hubs: ret.hubs,
+    
     };
   }
 
@@ -106,16 +109,16 @@ describe('TownsServiceAPIREST', () => {
     });
   });
 
-  /* describe('HubListAPI', () => {
+  describe('HubListAPI', () => {
     it('Lists hubs', async () => {
-      await createTownForTesting(undefined, true);
-      const hubs = await apiClient.listHubs();
+      const { coveyTownID }= await createTownForTesting(undefined, true);
+      const hubs = await apiClient.listHubs({coveyTownID});
 
       // Hubs should be created when a town is created.
-      expect(hubs.towns).toBeDefined();
-      expect(hubs.towns.length).toBeGreaterThan(0);
+      expect(hubs.hubs).toBeDefined();
+      expect(hubs.hubs.length).toBeGreaterThan(0);
     });
-  }); */
+  }); 
 
   describe('CoveyTownDeleteAPI', () => {
     it('Throws an error if the password is invalid', async () => {

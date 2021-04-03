@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { CoveyHubList } from '../CoveyTypes';
 import CoveyHubController from './CoveyHubController';
 
@@ -28,6 +29,8 @@ export default class CoveyHubStore {
   }
 
   getHubs(): CoveyHubList {
+    const temp = this._hubs;
+    console.log('HUBS', temp);
     return this._hubs.filter(hubController => hubController.isPubliclyListed)
       .map(hubController => ({
         coveyHubID: hubController.coveyHubID,
