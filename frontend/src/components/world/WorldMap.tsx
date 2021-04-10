@@ -44,7 +44,7 @@ class CoveyGameScene extends Phaser.Scene {
     this.load.image('tiles', '/assets/tilesets/tuxmon-sample-32px-extruded.png');
     this.load.image('tiles2', '/assets/roguelikeIndoor_transparent32px.png');
     this.load.image('tiles3', '/assets/roguelikeSheet_transparent32px.png');
-    this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town3.json');
+    this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town4.json');
     this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
   }
 
