@@ -311,7 +311,9 @@ class CoveyGameScene extends Phaser.Scene {
      */
     this.physics.add.overlap(sprite, transporters,
       (overlappingObject, transporter)=>{
-      if(cursorKeys.space.isDown && this.player){
+      if(cursorKeys.space.isDown && this.player && this.update){
+        const hubID = transporter.getData('hubID') as number;
+        const isPrivate = transporter.getData('type') as string;
         // In the tiled editor, set the 'target' to be an *object* pointer
         // Here, we'll see just the ID, then find the object by ID
         const transportTargetID = transporter.getData('target') as number;
