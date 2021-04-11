@@ -39,6 +39,7 @@ export interface TownJoinResponse {
 export interface TownCreateRequest {
   friendlyName: string;
   isPubliclyListed: boolean;
+  
 }
 
 /**
@@ -47,7 +48,15 @@ export interface TownCreateRequest {
 export interface TownCreateResponse {
   coveyTownID: string;
   coveyTownPassword: string;
+  hubs: CoveyHubInfo[];
+
 }
+
+export type CoveyHubInfo = { 
+  friendlyName: string; 
+  coveyHubID: string; 
+  coveyHubPassword: string;
+};
 
 /**
  * Response from the server for a Town list request
