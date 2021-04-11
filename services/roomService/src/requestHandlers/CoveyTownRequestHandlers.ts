@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { Socket } from 'socket.io';
 import Player from '../types/Player';
-import { CoveyTownList, UserLocation } from '../CoveyTypes';
+import { CoveyHubList, CoveyTownList, UserLocation } from '../CoveyTypes';
 import CoveyTownListener from '../types/CoveyTownListener';
 import CoveyTownsStore from '../lib/CoveyTownsStore';
 import { CoveyHubInfo } from '../client/TownsServiceClient';
@@ -52,7 +52,7 @@ export interface TownCreateRequest {
 export interface TownCreateResponse {
   coveyTownID: string;
   coveyTownPassword: string;
-  hubs: CoveyHubInfo[],
+  hubs: CoveyHubList,
 }
 
 /**
@@ -141,13 +141,13 @@ export async function townCreateHandler(requestData: TownCreateRequest): Promise
       message: 'FriendlyName must be specified',
     };
   }
-  const newTown = townsStore.createTown(requestData.friendlyName, requestData.isPubliclyListed);
+  const newTown= townsStore.createTown(requestData.friendlyName, requestData.isPubliclyListed);
   return {
     isOK: true,
     response: {
       coveyTownID: newTown.coveyTownID,
       coveyTownPassword: newTown.townUpdatePassword,
-      hubs: newTown.getHubControllers(),
+      hubs: newTown.getHubs(),
     },
   };
 }

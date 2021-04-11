@@ -1,5 +1,5 @@
 import { customAlphabet, nanoid } from 'nanoid';
-import { UserLocation } from '../CoveyTypes';
+import { CoveyHubList, UserLocation } from '../CoveyTypes';
 import CoveyTownListener from '../types/CoveyTownListener';
 import Player from '../types/Player';
 import CoveyHubStore from './CoveyHubStore';
@@ -53,12 +53,12 @@ export default class CoveyTownController {
     return this._coveyTownID;
   }
 
-  get hubs(): CoveyHubInfo[] {
+  get hubs(): CoveyHubController[] {
     return this._hubs; 
   }
 
   /** The List of Hubs in the town */
-  private _hubs: CoveyHubInfo[] = [];
+  private _hubs: CoveyHubController[] = [];
 
   /** The list of players currently in the town * */
   private _players: Player[] = [];
@@ -89,7 +89,7 @@ export default class CoveyTownController {
     this._isPubliclyListed = isPubliclyListed;
     this._friendlyName = friendlyName;
     const hubsStore = CoveyHubStore.getInstance();
-    /* const hospitalHub = hubsStore.createHub('Hospital', true, this._coveyTownID, 4 );
+    const hospitalHub = hubsStore.createHub('Hospital', true, this._coveyTownID, 4 );
     this._hubs.push(hospitalHub);
     const schoolHub = hubsStore.createHub('School', true, this._coveyTownID, 7);
     this._hubs.push(schoolHub);
@@ -186,7 +186,16 @@ export default class CoveyTownController {
     this._listeners.forEach((listener) => listener.onTownDestroyed());
   }
 
-  getHubControllers(): CoveyHubInfo[]{
+  getHubControllers(): CoveyHubController[]{
     return this._hubs;
+  }
+
+  getHubs(): CoveyHubList {
+    return this._hubs
+      .map(hubController => ({
+        coveyHubID: hubController.coveyHubID,
+        friendlyName: hubController.friendlyName,
+        password: hubController.hubUpdatePassword,
+      }));
   }
 }
