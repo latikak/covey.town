@@ -7,6 +7,7 @@ import CoveyHubController from './CoveyHubController';
 import PlayerSession from '../types/PlayerSession';
 import TwilioVideo from './TwilioVideo';
 import IVideoClient from './IVideoClient';
+import { CoveyHubInfo } from '../client/TownsServiceClient';
 
 const friendlyNanoID = customAlphabet('1234567890ABCDEF', 8);
 
@@ -52,12 +53,12 @@ export default class CoveyTownController {
     return this._coveyTownID;
   }
 
-  get hubs(): CoveyHubController[] {
+  get hubs(): CoveyHubInfo[] {
     return this._hubs; 
   }
 
   /** The List of Hubs in the town */
-  private _hubs: CoveyHubController[] = [];
+  private _hubs: CoveyHubInfo[] = [];
 
   /** The list of players currently in the town * */
   private _players: Player[] = [];
@@ -88,23 +89,23 @@ export default class CoveyTownController {
     this._isPubliclyListed = isPubliclyListed;
     this._friendlyName = friendlyName;
     const hubsStore = CoveyHubStore.getInstance();
-    const hospitalHub = hubsStore.createHub('Hospital', true, this._coveyTownID );
+    /* const hospitalHub = hubsStore.createHub('Hospital', true, this._coveyTownID, 4 );
     this._hubs.push(hospitalHub);
-    const schoolHub = hubsStore.createHub('School', true, this._coveyTownID );
+    const schoolHub = hubsStore.createHub('School', true, this._coveyTownID, 7);
     this._hubs.push(schoolHub);
     // Add Private Hubs
-    const privHub1 = hubsStore.createHub('House_1', true, this._coveyTownID );
+    const privHub1 = hubsStore.createHub('House_1', false, this._coveyTownID, 1 );
     this._hubs.push(privHub1);
-    const privHub2 = hubsStore.createHub('House_2', true, this._coveyTownID );
+    const privHub2 = hubsStore.createHub('House_2', false, this._coveyTownID, 2 );
     this._hubs.push(privHub2);
-    const privHub3 = hubsStore.createHub('House_3', true, this._coveyTownID );
+    const privHub3 = hubsStore.createHub('House_3', false, this._coveyTownID, 3 );
     this._hubs.push(privHub3);
-    const privHub4 = hubsStore.createHub('House_4', true, this._coveyTownID );
-    this._hubs.push(privHub4);
-    const privHub5 = hubsStore.createHub('House_5', true, this._coveyTownID );
+    const privHub5 = hubsStore.createHub('House_5', false, this._coveyTownID, 5 );
     this._hubs.push(privHub5);
-    const privHub6 = hubsStore.createHub('House_6', true, this._coveyTownID );
-    this._hubs.push(privHub6);
+    const privHub6 = hubsStore.createHub('House_6', false, this._coveyTownID, 6 );
+    this._hubs.push(privHub6); 
+    // const privHub6 = hubsStore.createHub('House_6', true, this._coveyTownID );
+    // this._hubs.push(privHub6); */
     
   }
 
@@ -185,7 +186,7 @@ export default class CoveyTownController {
     this._listeners.forEach((listener) => listener.onTownDestroyed());
   }
 
-  getHubControllers(): CoveyHubController[]{
+  getHubControllers(): CoveyHubInfo[]{
     return this._hubs;
   }
 }

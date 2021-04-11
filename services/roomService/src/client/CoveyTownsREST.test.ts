@@ -86,6 +86,8 @@ describe('TownsServiceAPIREST', () => {
       const privTown2 = await createTownForTesting(undefined, false);
 
       const towns = await apiClient.listTowns();
+      const hubs = await apiClient.listHubs();
+      
       expectTownListMatches(towns, pubTown1);
       expectTownListMatches(towns, pubTown2);
       expectTownListMatches(towns, privTown1);

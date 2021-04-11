@@ -12,7 +12,7 @@ export interface HubJoinRequest {
   /** userName of the player that would like to join * */
   userName: string;
   /** ID of the Hub that the player would like to join * */
-  coveyHubID: string;
+  coveyHubID: number;
 }
 
 /**
@@ -148,7 +148,7 @@ export async function hubListHandler(): Promise<ResponseEnvelope<HubListResponse
       coveyHubPassword: newHub.hubUpdatePassword,
     },
   };
-} */
+} 
 
 export async function hubDeleteHandler(requestData: HubDeleteRequest): Promise<ResponseEnvelope<Record<string, null>>> {
   const hubsStore = CoveyHubStore.getInstance();
@@ -158,7 +158,7 @@ export async function hubDeleteHandler(requestData: HubDeleteRequest): Promise<R
     response: {},
     message: !success ? 'Invalid password. Please double check your hub update password.' : undefined,
   };
-}
+} 
 
 export async function hubUpdateHandler(requestData: HubUpdateRequest): Promise<ResponseEnvelope<Record<string, null>>> {
   const hubsStore = CoveyHubStore.getInstance();
@@ -169,7 +169,7 @@ export async function hubUpdateHandler(requestData: HubUpdateRequest): Promise<R
     message: !success ? 'Invalid password or update values specified. Please double check your hub update password.' : undefined,
   };
 
-}
+} */
 
 /**
  * An adapter between CoveyHubController's event interface (CoveyHubListener)
@@ -203,7 +203,7 @@ function hubSocketAdapter(socket: Socket): CoveyHubListener {
 export function hubSubscriptionHandler(socket: Socket): void {
   // Parse the client's session token from the connection
   // For each player, the session token should be the same string returned by joinHubHandler
-  const { token, coveyHubID } = socket.handshake.auth as { token: string; coveyHubID: string };
+  const { token, coveyHubID } = socket.handshake.auth as { token: string; coveyHubID: number };
 
   const hubController = CoveyHubStore.getInstance()
     .getControllerForHub(coveyHubID);

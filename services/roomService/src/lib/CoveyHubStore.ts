@@ -23,7 +23,7 @@ export default class CoveyHubStore {
     return CoveyHubStore._instance;
   }
 
-  getControllerForHub(coveyHubID: string): CoveyHubController | undefined {
+  getControllerForHub(coveyHubID: number): CoveyHubController | undefined {
     return this._hubs.find(hub => hub.coveyHubID === coveyHubID);
   }
 
@@ -32,19 +32,18 @@ export default class CoveyHubStore {
       .map(hubController => ({
         coveyHubID: hubController.coveyHubID,
         friendlyName: hubController.friendlyName,
-        currentOccupancy: hubController.occupancy,
-        maximumOccupancy: hubController.capacity,
+        password: hubController.hubUpdatePassword,
       }));
   }
 
   
-  createHub(friendlyName: string, isPubliclyListed: boolean, townId: string): CoveyHubController {
-    const newHub = new CoveyHubController(friendlyName, isPubliclyListed, townId);
+  createHub(friendlyName: string, isPubliclyListed: boolean, coveyTownID: string, hubID: number): CoveyHubController {
+    const newHub = new CoveyHubController(friendlyName, isPubliclyListed, coveyTownID, hubID);
     this._hubs.push(newHub);
     return newHub;
   } 
 
-  updateHub(coveyHubID: string, coveyHubPassword: string, friendlyName?: string, makePublic?: boolean): boolean {
+  updateHub(coveyHubID: number, coveyHubPassword: string, friendlyName?: string, makePublic?: boolean): boolean {
     const existingHub = this.getControllerForHub(coveyHubID);
     if (existingHub && passwordMatches(coveyHubPassword, existingHub.hubUpdatePassword)) {
       if (friendlyName !== undefined) {
@@ -61,7 +60,7 @@ export default class CoveyHubStore {
     return false;
   }
 
-  deleteHub(coveyHubID: string, coveyHubPassword: string): boolean {
+  deleteHub(coveyHubID: number, coveyHubPassword: string): boolean {
     const existingHub = this.getControllerForHub(coveyHubID);
     if (existingHub && passwordMatches(coveyHubPassword, existingHub.hubUpdatePassword)) {
       this._hubs = this._hubs.filter(hub => hub !== existingHub);

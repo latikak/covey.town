@@ -4,6 +4,8 @@ import Player from '../types/Player';
 import { CoveyTownList, UserLocation } from '../CoveyTypes';
 import CoveyTownListener from '../types/CoveyTownListener';
 import CoveyTownsStore from '../lib/CoveyTownsStore';
+import { CoveyHubInfo } from '../client/TownsServiceClient';
+import CoveyHubController from '../lib/CoveyHubController';
 
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware
@@ -50,6 +52,7 @@ export interface TownCreateRequest {
 export interface TownCreateResponse {
   coveyTownID: string;
   coveyTownPassword: string;
+  hubs: CoveyHubInfo[],
 }
 
 /**
@@ -144,6 +147,7 @@ export async function townCreateHandler(requestData: TownCreateRequest): Promise
     response: {
       coveyTownID: newTown.coveyTownID,
       coveyTownPassword: newTown.townUpdatePassword,
+      hubs: newTown.getHubControllers(),
     },
   };
 }

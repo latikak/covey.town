@@ -50,6 +50,9 @@ export interface TownCreateRequest {
 export interface TownCreateResponse {
   coveyTownID: string;
   coveyTownPassword: string;
+  hubs: CoveyHubInfo[];
+
+  
 }
 
 /**
@@ -63,7 +66,7 @@ export interface TownListResponse {
  * Response from the server for a Hub list request
  */
 export interface HubListResponse {
-  towns: CoveyHubInfo[];
+  hubs: CoveyHubInfo[];
 }
 
 /**
@@ -105,8 +108,8 @@ export type CoveyTownInfo = {
 export type CoveyHubInfo = { 
   friendlyName: string; 
   coveyHubID: string; 
-  currentOccupancy: number; 
-  maximumOccupancy: number;
+  coveyHubPassword: string;
+
 };
 
 export default class TownsServiceClient {

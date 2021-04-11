@@ -6,7 +6,7 @@ import PlayerSession from '../types/PlayerSession';
 import TwilioVideo from './TwilioVideo';
 import IVideoClient from './IVideoClient';
 
-const friendlyNanoID = customAlphabet('1234567890ABCDEF', 8);
+// const friendlyNanoID = customAlphabet('1234567890ABCDEF', 8);
 
 /**
  * The CoveyHubController implements the logic for each hub: managing the various events that
@@ -46,7 +46,7 @@ export default class CoveyHubController {
     this._friendlyName = value;
   }
 
-  get coveyHubID(): string {
+  get coveyHubID(): number {
     return this._coveyHubID;
   }
 
@@ -67,7 +67,7 @@ export default class CoveyHubController {
   /** The list of CoveyTownListeners that are subscribed to events in this town * */
   private _listeners: CoveyHubListener[] = [];
 
-  private  _coveyHubID: string;
+  private  _coveyHubID: number;
 
   private _friendlyName: string;
 
@@ -79,8 +79,8 @@ export default class CoveyHubController {
   
   private  _coveyTownID: string;
 
-  constructor(friendlyName: string, isPubliclyListed: boolean, coveyTownID: string) {
-    this._coveyHubID = (process.env.DEMO_TOWN_ID === friendlyName ? friendlyName : friendlyNanoID());
+  constructor(friendlyName: string, isPubliclyListed: boolean, coveyTownID: string, coveyHubID: number) {
+    this._coveyHubID = coveyHubID;
     this._coveyTownID = coveyTownID;
     this._capacity = 50;
     this._hubUpdatePassword = nanoid(24);
@@ -101,7 +101,7 @@ export default class CoveyHubController {
     this._players.push(newPlayer);
 
     // Create a video token for this user to join this town
-    theSession.videoToken = await this._videoClient.getTokenForTown(this._coveyHubID, newPlayer.id);
+    theSession.videoToken = await this._videoClient.getTokenForTown(this._coveyTownID, newPlayer.id);
 
     // Notify other players that this player has joined
     this._listeners.forEach((listener) => listener.onPlayerJoined(newPlayer));
