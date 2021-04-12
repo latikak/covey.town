@@ -5,12 +5,12 @@ import { nanoid } from 'nanoid';
 import assert from 'assert';
 import { AddressInfo } from 'net';
 
-import TownsServiceClient, { TownListResponse } from './TownsServiceClient';
+import TownsServiceClient, { CoveyHubInfo, TownListResponse } from './TownsServiceClient';
 import addTownRoutes from '../router/towns';
 
 type TestTownData = {
   friendlyName: string, coveyTownID: string,
-  isPubliclyListed: boolean, townUpdatePassword: string
+  isPubliclyListed: boolean, townUpdatePassword: string, hubs:CoveyHubInfo[]
 };
 
 function expectTownListMatches(towns: TownListResponse, town: TestTownData) {
@@ -43,6 +43,8 @@ describe('TownsServiceAPIREST', () => {
       isPubliclyListed: isPublic,
       coveyTownID: ret.coveyTownID,
       townUpdatePassword: ret.coveyTownPassword,
+      hubs:ret.hubs,
+    
     };
   }
 
@@ -76,6 +78,20 @@ describe('TownsServiceAPIREST', () => {
         // OK
       }
     });
+    it('constructor should set Hubs', async () => { // Included in handout
+      const firstTown = await createTownForTesting();
+      expect(firstTown.hubs.length).toStrictEqual(7);  
+    });
+  
+    it('Public Hubs are created', async () => { // Included in handout
+      const firstTown = await createTownForTesting();
+      expect(firstTown.hubs.filter(e=>e.isPubliclyListed===true).length).toBe(2);  
+    });
+  
+    it('Private Hubs are created', async () => { // Included in handout
+      const firstTown = await createTownForTesting();
+      expect(firstTown.hubs.filter(e=>e.isPubliclyListed===false).length).toEqual(5);   
+    });
   });
 
   describe('CoveyTownListAPI', () => {
@@ -86,7 +102,6 @@ describe('TownsServiceAPIREST', () => {
       const privTown2 = await createTownForTesting(undefined, false);
 
       const towns = await apiClient.listTowns();
-      const hubs = await apiClient.listHubs();
       
       expectTownListMatches(towns, pubTown1);
       expectTownListMatches(towns, pubTown2);

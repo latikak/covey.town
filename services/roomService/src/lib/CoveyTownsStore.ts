@@ -42,12 +42,12 @@ export default class CoveyTownsStore {
   }
 
   getHubs(): CoveyHubList {
-    return this._hubs.filter(hubController => hubController.isPubliclyListed)
-      .map(hubController => ({
-        coveyHubID: hubController.coveyHubID,
-        friendlyName: hubController.friendlyName,
-        password: hubController.hubUpdatePassword,
-      }));
+    return this._hubs.map(hubController => ({
+      coveyHubID: hubController.coveyHubID,
+      friendlyName: hubController.friendlyName,
+      password: hubController.hubUpdatePassword,
+      isPubliclyListed:hubController.isPubliclyListed,
+    }));
   }
   
   createTown(friendlyName: string, isPubliclyListed: boolean): CoveyTownController  {
