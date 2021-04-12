@@ -10,7 +10,7 @@ import addTownRoutes from '../router/towns';
 
 type TestTownData = {
   friendlyName: string, coveyTownID: string,
-  isPubliclyListed: boolean, townUpdatePassword: string,hubs:CoveyHubInfo[]
+  isPubliclyListed: boolean, townUpdatePassword: string, hubs:CoveyHubInfo[]
 };
 
 function expectTownListMatches(towns: TownListResponse, town: TestTownData) {
@@ -78,38 +78,37 @@ describe('TownsServiceAPIREST', () => {
         // OK
       }
     });
-    it('constructor should set Hubs', async () => { 
-    const firstTown = await createTownForTesting();
-    expect(firstTown.hubs.length).toBe(7);   
+    it('constructor should set Hubs', async () => { // Included in handout
+      const firstTown = await createTownForTesting();
+      expect(firstTown.hubs.length).toStrictEqual(7);  
     });
   
     it('Public Hubs are created', async () => { // Included in handout
       const firstTown = await createTownForTesting();
-      expect(firstTown.hubs.filter(e=>e.isPubliclyListed==true).length).toBe(2);  
+      expect(firstTown.hubs.filter(e=>e.isPubliclyListed===true).length).toBe(2);  
     });
   
     it('Private Hubs are created', async () => { // Included in handout
       const firstTown = await createTownForTesting();
-      expect(firstTown.hubs.filter(e=>e.isPubliclyListed==false).length).toBe(5);   
+      expect(firstTown.hubs.filter(e=>e.isPubliclyListed===false).length).toEqual(5);   
     });
   });
 
   describe('CoveyTownListAPI', () => {
-    /*it('Lists public towns, but not private towns', async () => {
+    it('Lists public towns, but not private towns', async () => {
       const pubTown1 = await createTownForTesting(undefined, true);
       const privTown1 = await createTownForTesting(undefined, false);
       const pubTown2 = await createTownForTesting(undefined, true);
       const privTown2 = await createTownForTesting(undefined, false);
 
       const towns = await apiClient.listTowns();
-      const hubs = await apiClient.listHubs();
       
       expectTownListMatches(towns, pubTown1);
       expectTownListMatches(towns, pubTown2);
       expectTownListMatches(towns, privTown1);
       expectTownListMatches(towns, privTown2);
 
-    });*/
+    });
     it('Allows for multiple towns with the same friendlyName', async () => {
       const pubTown1 = await createTownForTesting(undefined, true);
       const privTown1 = await createTownForTesting(pubTown1.friendlyName, false);

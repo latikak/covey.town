@@ -4,8 +4,6 @@ import Player from '../types/Player';
 import { CoveyHubList, CoveyTownList, UserLocation } from '../CoveyTypes';
 import CoveyTownListener from '../types/CoveyTownListener';
 import CoveyTownsStore from '../lib/CoveyTownsStore';
-import { CoveyHubInfo } from '../client/TownsServiceClient';
-import CoveyHubController from '../lib/CoveyHubController';
 
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware

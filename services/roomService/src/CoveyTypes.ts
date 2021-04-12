@@ -7,4 +7,4 @@ export type UserLocation = {
 };
 export type CoveyTownList = { friendlyName: string; coveyTownID: string; currentOccupancy: number; maximumOccupancy: number }[];
 
-export type CoveyHubList = { friendlyName: string; coveyHubID: number; password : string,isPubliclyListed:boolean}[];
+export type CoveyHubList = { friendlyName: string; coveyHubID: number; password : string, isPubliclyListed:boolean}[];

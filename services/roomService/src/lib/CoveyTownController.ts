@@ -7,7 +7,6 @@ import CoveyHubController from './CoveyHubController';
 import PlayerSession from '../types/PlayerSession';
 import TwilioVideo from './TwilioVideo';
 import IVideoClient from './IVideoClient';
-import { CoveyHubInfo } from '../client/TownsServiceClient';
 
 const friendlyNanoID = customAlphabet('1234567890ABCDEF', 8);
 
@@ -196,7 +195,7 @@ export default class CoveyTownController {
         coveyHubID: hubController.coveyHubID,
         friendlyName: hubController.friendlyName,
         password: hubController.hubUpdatePassword,
-        isPubliclyListed: hubController.isPubliclyListed
+        isPubliclyListed: hubController.isPubliclyListed,
       }));
   }
 }
