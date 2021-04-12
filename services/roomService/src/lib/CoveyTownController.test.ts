@@ -42,7 +42,7 @@ describe('CoveyTownController', () => {
   it('constructor should set Hubs', () => { // Included in handout
     const townName = `FriendlyNameTest-${nanoid()}`;
     const townController = new CoveyTownController(townName, true);
-    expect(townController.hubs.length).toBe(8);
+    expect(townController.hubs.length).toBe(7);
     
     
   });
@@ -54,7 +54,7 @@ describe('CoveyTownController', () => {
     const townController = new CoveyTownController(testTownId, true);
     const hubs = townController.getHubControllers();
     const townId = townController.coveyTownID;
-    expect(hubs.filter(e => e.coveyTownID === townId).length).toBe(8);   
+    expect(hubs.filter(e => e.coveyTownID === townId).length).toBe(7);   
     
   });  
 
@@ -62,14 +62,14 @@ describe('CoveyTownController', () => {
     const townName = `FriendlyNameTest-${nanoid()}`;
     const townController = new CoveyTownController(townName, true);
     const hubs = townController.getHubControllers();
-    expect(hubs.filter(e => e.isPubliclyListed === true).length).toBe(8);
+    expect(hubs.filter(e => e.isPubliclyListed === true).length).toBe(2);
   });
 
   it('Private Hubs are created', () => { // Included in handout
     const townName = `FriendlyNameTest-${nanoid()}`;
     const townController = new CoveyTownController(townName, true);
     const hubs = townController.getHubControllers();
-    expect(hubs.filter(e => e.isPubliclyListed === false).length).toBe(0); 
+    expect(hubs.filter(e => e.isPubliclyListed === false).length).toBe(5); 
   });
   
   describe('addPlayer', () => { // Included in handout

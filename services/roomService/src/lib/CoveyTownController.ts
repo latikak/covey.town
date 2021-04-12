@@ -196,6 +196,7 @@ export default class CoveyTownController {
         coveyHubID: hubController.coveyHubID,
         friendlyName: hubController.friendlyName,
         password: hubController.hubUpdatePassword,
+        isPubliclyListed: hubController.isPubliclyListed
       }));
   }
 }

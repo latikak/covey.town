@@ -33,6 +33,7 @@ export default class CoveyHubStore {
         coveyHubID: hubController.coveyHubID,
         friendlyName: hubController.friendlyName,
         password: hubController.hubUpdatePassword,
+        isPubliclyListed:hubController.isPubliclyListed
       }));
   }
 

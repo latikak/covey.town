@@ -56,6 +56,7 @@ export type CoveyHubInfo = {
   friendlyName: string; 
   coveyHubID: string; 
   coveyHubPassword: string;
+  isPubliclyListed:boolean
 };
 
 /**
