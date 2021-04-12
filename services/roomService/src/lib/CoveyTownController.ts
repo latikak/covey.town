@@ -150,6 +150,29 @@ export default class CoveyTownController {
     this._listeners.forEach((listener) => listener.onPlayerMoved(player));
   }
 
+  requestToJoinHub(player: Player, location: UserLocation, coveyHubID: number, password?: string): boolean {
+    player.updateLocation(location);
+    this._listeners.forEach((listener) => listener.onPlayerMoved(player));
+    const currentHub =  this._hubs.find(hub => coveyHubID === hub.coveyHubID);
+    if (currentHub){
+      if (currentHub.occupancy > 15){
+        return false;
+      }
+      if (currentHub.isPubliclyListed === false){
+        if (password){
+          if (currentHub.hubUpdatePassword === password){
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+
+
+
+  }
+
+
   /**
    * Subscribe to events from this town. Callers should make sure to
    * unsubscribe when they no longer want those events by calling removeTownListener

@@ -33,6 +33,7 @@ type CoveyAppUpdate =
   | { action: 'playerDisconnect'; player: Player }
   | { action: 'weMoved'; location: UserLocation }
   | { action: 'disconnect' }
+  | { action: 'joinRequest'; data: { emitJoinRequest: (hubID: number, townIsPubliclyListed:boolean,  occupancy : number, password?: string ,) => boolean}}
   ;
 
 function defaultAppState(): CoveyAppState {
@@ -51,6 +52,7 @@ function defaultAppState(): CoveyAppState {
     },
     emitMovement: () => {
     },
+    emitJoinRequest: () => true,
     apiClient: new TownsServiceClient(),
   };
 }
@@ -67,6 +69,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     userName: state.userName,
     socket: state.socket,
     emitMovement: state.emitMovement,
+    emitJoinRequest: state.emitJoinRequest,
     apiClient: state.apiClient,
   };
 
@@ -126,7 +129,11 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       if (samePlayers(nextState.nearbyPlayers, state.nearbyPlayers)) {
         nextState.nearbyPlayers = state.nearbyPlayers;
       }
+      break;
+    case 'joinRequest':
 
+      // nextState.emitJoinRequest= update.data.emitJoinRequest;
+      
       break;
     case 'playerDisconnect':
       nextState.players = nextState.players.filter((player) => player.id !== update.player.id);
@@ -177,6 +184,8 @@ async function GameController(initData: TownJoinResponse,
   socket.on('disconnect', () => {
     dispatchAppUpdate({ action: 'disconnect' });
   });
+
+  // socket.on('requestToJoinHub', () => dispatchAppUpdate({ action: 'joinRequest' }));
   const emitMovement = (location: UserLocation) => {
     socket.emit('playerMovement', location);
     dispatchAppUpdate({ action: 'weMoved', location });

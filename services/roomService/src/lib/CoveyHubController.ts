@@ -36,7 +36,7 @@ export default class CoveyHubController {
   }
 
   get occupancy(): number {
-    return this._listeners.length;
+    return this._occupancy;
   }
 
   get friendlyName(): string {
@@ -59,6 +59,7 @@ export default class CoveyHubController {
   /** The list of players currently in the town * */
   private _players: Player[] = [];
 
+
   /** The list of valid sessions for this town * */
   private _sessions: PlayerSession[] = [];
 
@@ -69,6 +70,8 @@ export default class CoveyHubController {
   private _listeners: CoveyHubListener[] = [];
 
   private  _coveyHubID: number;
+
+  private _occupancy: number;
 
   private _friendlyName: string;
 
@@ -87,6 +90,7 @@ export default class CoveyHubController {
     this._hubUpdatePassword = nanoid(24);
     this._isPubliclyListed = isPubliclyListed;
     this._friendlyName = friendlyName;
+    this._occupancy = 0;
   }
 
   /**
