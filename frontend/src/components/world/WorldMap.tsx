@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Phaser from 'phaser';
+import {toast} from 'react-toastify'; 
+import { Input, Box, Button, Flex, FormControl, FormLabel, Heading } from '@chakra-ui/react';
+import * as am4charts from "@amcharts/amcharts4/charts";
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
-
+// Importing toastify module
+    
+ // toast-configuration method, 
+ // it is compulsory method.
+// toast.configure()
 // https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
 class CoveyGameScene extends Phaser.Scene {
   private player?: {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, label: Phaser.GameObjects.Text
   };
+
+  private currentHospitalOccupants  = 0;
 
   private id?: string;
 
@@ -30,6 +39,8 @@ class CoveyGameScene extends Phaser.Scene {
   private paused = false;
 
   private video: Video;
+
+
 
   private emitMovement: (loc: UserLocation) => void;
 
@@ -304,18 +315,97 @@ class CoveyGameScene extends Phaser.Scene {
       label
     };
 
+    /* function handleJoin( transporter: unknown): void {
+      try {
+        const townIDToJoin = ' '
+        if (!townIDToJoin || townIDToJoin.length === 0) {
+          toast({
+            title: 'Unable to join hub',
+            description: 'Please enter a password',
+            status: 'error',
+          });
+          return;
+        }
+
+        const password = transporter.getData('password') as string;
+        if(townIDToJoin === password){
+          toast({
+            title: 'You can now enter the hub',
+            status: 'success'
+          })
+        }
+      } catch (err) {
+        toast({
+          title: 'Unable to connect to Hubs',
+          description: err.toString(),
+          status: 'error'
+        })
+      }
+    }
+    */
+    
+
     /* Configure physics overlap behavior for when the player steps into
     a transporter area. If you enter a transporter and press 'space', you'll
     transport to the location on the map that is referenced by the 'target' property
     of the transporter.
      */
+
     this.physics.add.overlap(sprite, transporters,
       (overlappingObject, transporter)=>{
-      if(cursorKeys.space.isDown && this.player && this.update){
-        const hubID = transporter.getData('hubID') as number;
-        const isPrivate = transporter.getData('type') as string;
+        // const hubID = transporter.getData('hubID') as number;
+        /* const isPrivate = transporter.getData('type') as string;
+        if (isPrivate === 'private'){
+        <Box borderWidth="1px" borderRadius="lg">
+            <Heading p="4" as="h2" size="lg">Enter the password to join this hub</Heading>
+            <Box borderWidth="1px" borderRadius="lg">
+              <Flex p="4"><FormControl>
+                <FormLabel htmlFor="townIDToJoin">Password</FormLabel>
+                <Input type="password" name="password" />
+              </FormControl>
+
+                <Button data-testid='joinTownByIDButton'
+onChange={() => handleJoin(transporter)}>Join</Button>
+              </Flex>
+          </Box>
+          </Box>
+
+          
+        } */
+        // const publicMaxOccupancy = 1;
+        // let privateMaxOccupancy = 1;
+
         // In the tiled editor, set the 'target' to be an *object* pointer
         // Here, we'll see just the ID, then find the object by ID
+        /* const objID = transporter.getData('target') as number;
+        const hubID = transporter.getData('hubID') as number;
+        if (this.currentHospitalOccupants  >= publicMaxOccupancy){
+          window.alert(`Hospital has reached Maximum Capacity${  objID}`);
+          return;
+        }
+        if( objID === 305 && (this.currentHospitalOccupants  < publicMaxOccupancy)) {
+          this.currentHospitalOccupants += 1;
+          window.alert(`Hospital has Id 305 occupancy is ${this.currentHospitalOccupants}`);
+        }
+        
+        /*
+        else if (objID === 308) {
+          this.currentHospitalOccupants -= 1;
+        } */
+
+        if(cursorKeys.space.isDown && this.player){
+        
+        const hubID = transporter.getData('hubID') as number;
+        if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
+
+          window.alert("Private room. Please enter password!");
+          // charts.openPopup("Hello there!");
+
+          alert("Please enter password to enter Private Hub");
+
+          return;
+        }
+
         const transportTargetID = transporter.getData('target') as number;
         const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
         if(target && target.x && target.y && this.lastLocation){
@@ -439,7 +529,7 @@ class CoveyGameScene extends Phaser.Scene {
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   const {
-    emitMovement, players,
+    emitMovement, players, emitJoinRequest,
   } = useCoveyAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
   useEffect(() => {
@@ -480,3 +570,6 @@ export default function WorldMap(): JSX.Element {
 
   return <div id="map-container"/>;
 }
+
+
+

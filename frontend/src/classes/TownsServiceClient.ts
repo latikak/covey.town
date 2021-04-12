@@ -12,6 +12,7 @@ export interface TownJoinRequest {
   coveyTownID: string;
 }
 
+
 /**
  * The format of a response to join a Town in Covey.Town, as returned by the handler to the server
  * middleware

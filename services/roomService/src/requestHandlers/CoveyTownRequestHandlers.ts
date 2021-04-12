@@ -194,6 +194,7 @@ function townSocketAdapter(socket: Socket): CoveyTownListener {
       socket.emit('townClosing');
       socket.disconnect(true);
     },
+
   };
 }
 
@@ -236,4 +237,13 @@ export function townSubscriptionHandler(socket: Socket): void {
   socket.on('playerMovement', (movementData: UserLocation) => {
     townController.updatePlayerLocation(s.player, movementData);
   });
+
+  socket.on('requestToJoinHub', (movementData: UserLocation, coveyHubID: number, password?: string) => {
+    const request  = townController.requestToJoinHub(s.player, movementData, coveyHubID, password);
+    if (request ===true){
+      return true;
+    }
+    return false;
+  });
+
 }
