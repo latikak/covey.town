@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Phaser from 'phaser';
+import Phaser, { Display } from 'phaser';
 import {toast} from 'react-toastify'; 
 import { Input, Box, Button, Flex, FormControl, FormLabel, Heading } from '@chakra-ui/react';
-import * as am4charts from "@amcharts/amcharts4/charts";
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
@@ -57,6 +56,8 @@ class CoveyGameScene extends Phaser.Scene {
     this.load.image('tiles3', '/assets/roguelikeSheet_transparent32px.png');
     this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town4.json');
     this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
+    this.load.html('passwordForm', '/assets/html/password.html');
+
   }
 
   updatePlayersLocations(players: Player[]) {
@@ -294,7 +295,18 @@ class CoveyGameScene extends Phaser.Scene {
       'right': Phaser.Input.Keyboard.KeyCodes.L
     }, false) as Phaser.Types.Input.Keyboard.CursorKeys);
 
-
+    function display(): JSX.Element {
+      return (<Box borderWidth="1px" borderRadius="lg">
+        <Heading p="4" as="h2" size="lg">Enter the password to join this hub</Heading>
+        <Box borderWidth="1px" borderRadius="lg">
+          <Flex p="4"><FormControl>
+            <FormLabel htmlFor="townIDToJoin">Password</FormLabel>
+            <Input type="password" name="password" />
+          </FormControl>
+          </Flex>
+        </Box>
+      </Box>);
+    }
 
 
     // Create a sprite with physics enabled via the physics system. The image used for the sprite
@@ -315,7 +327,7 @@ class CoveyGameScene extends Phaser.Scene {
       label
     };
 
-    /* function handleJoin( transporter: unknown): void {
+    function handleJoin( transporter: unknown): void {
       try {
         const townIDToJoin = ' '
         if (!townIDToJoin || townIDToJoin.length === 0) {
@@ -327,8 +339,8 @@ class CoveyGameScene extends Phaser.Scene {
           return;
         }
 
-        const password = transporter.getData('password') as string;
-        if(townIDToJoin === password){
+        // const password = transporter.getData('password') as string;
+        if(townIDToJoin === ' '){
           toast({
             title: 'You can now enter the hub',
             status: 'success'
@@ -342,7 +354,7 @@ class CoveyGameScene extends Phaser.Scene {
         })
       }
     }
-    */
+
     
 
     /* Configure physics overlap behavior for when the player steps into
@@ -356,19 +368,7 @@ class CoveyGameScene extends Phaser.Scene {
         // const hubID = transporter.getData('hubID') as number;
         /* const isPrivate = transporter.getData('type') as string;
         if (isPrivate === 'private'){
-        <Box borderWidth="1px" borderRadius="lg">
-            <Heading p="4" as="h2" size="lg">Enter the password to join this hub</Heading>
-            <Box borderWidth="1px" borderRadius="lg">
-              <Flex p="4"><FormControl>
-                <FormLabel htmlFor="townIDToJoin">Password</FormLabel>
-                <Input type="password" name="password" />
-              </FormControl>
-
-                <Button data-testid='joinTownByIDButton'
-onChange={() => handleJoin(transporter)}>Join</Button>
-              </Flex>
-          </Box>
-          </Box>
+        
 
           
         } */
@@ -387,6 +387,8 @@ onChange={() => handleJoin(transporter)}>Join</Button>
           this.currentHospitalOccupants += 1;
           window.alert(`Hospital has Id 305 occupancy is ${this.currentHospitalOccupants}`);
         }
+                        /* <Button data-testid='joinTownByIDButton'
+onChange={() => handleJoin(transporter)}>Join</Button> */
         
         /*
         else if (objID === 308) {
@@ -398,10 +400,58 @@ onChange={() => handleJoin(transporter)}>Join</Button>
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
 
-          window.alert("Private room. Please enter password!");
-          // charts.openPopup("Hello there!");
+          // display();
+          /* this.add
+          .text(150, 150, `Private room. Please enter password! `, {
+            font: '18px monospace',
+            color: '#000000',
+            padding: {
+              x: 20,
+              y: 10
+            },
+            backgroundColor: '#ffffff',
+          })
+          .setScrollFactor(0)
+          .setDepth(30); */
 
-          alert("Please enter password to enter Private Hub");
+
+          // this.add.dom(300,300, 'div', 'background-color: lime; width: 220px; height: 100px; font: 48px Arial', 'Phaser');
+          this.add.dom(300, 300).createFromCache('passwordForm');
+          const element = this.add.dom(150, 150).createFromCache('passwordForm');
+          console.log(element)
+          element.addListener('submit');
+      
+          element.on('submit',  (event: { target: { name: string; }; }) => {
+      
+              if (event.target.name === 'submit')
+              {
+                  const inputText =  this.children.getByName('password');
+
+      
+                  //  Have they entered anything?
+                  if (inputText)
+                  {
+                        // 
+                  }
+                  else
+                  {
+                      //  Flash the prompt
+                      this.tweens.add({
+                          targets: Text,
+                          alpha: 0.2,
+                          duration: 250,
+                          ease: 'Power3',
+                          yoyo: true
+                      });
+                  }
+              }
+      
+          });
+  
+
+          // window.alert("Private room. Please enter password!");
+          
+          // alert("Please enter password to enter Private Hub");
 
           return;
         }
@@ -525,6 +575,8 @@ onChange={() => handleJoin(transporter)}>Join</Button>
     this.previouslyCapturedKeys = [];
   }
 }
+
+
 
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
