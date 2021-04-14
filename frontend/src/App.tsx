@@ -185,7 +185,8 @@ async function GameController(initData: TownJoinResponse,
     dispatchAppUpdate({ action: 'disconnect' });
   });
 
-  // socket.on('requestToJoinHub', () => dispatchAppUpdate({ action: 'joinRequest' }));
+  // socket.on('requestToJoinHub', () => {
+  //  dispatchAppUpdate({ action: 'joinRequest' }));
   const emitMovement = (location: UserLocation) => {
     socket.emit('playerMovement', location);
     dispatchAppUpdate({ action: 'weMoved', location });

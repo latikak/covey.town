@@ -5,12 +5,10 @@ import { Input, Box, Button, Flex, FormControl, FormLabel, Heading } from '@chak
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
-// Importing toastify module
-    
- // toast-configuration method, 
- // it is compulsory method.
-// toast.configure()
+
+
 // https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
+
 class CoveyGameScene extends Phaser.Scene {
   private player?: {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, label: Phaser.GameObjects.Text
@@ -39,8 +37,6 @@ class CoveyGameScene extends Phaser.Scene {
 
   private video: Video;
 
-
-
   private emitMovement: (loc: UserLocation) => void;
 
   constructor(video: Video, emitMovement: (loc: UserLocation) => void) {
@@ -57,7 +53,12 @@ class CoveyGameScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town4.json');
     this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
     this.load.html('passwordForm', '/assets/html/password.html');
-
+    this.load.plugin('rexinputtextplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js', true);
+    this.load.scenePlugin({
+      key: 'rexuiplugin',
+      url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/plugins/dist/rexuiplugin.min.js',
+      sceneKey: 'rexUI'
+  });
   }
 
   updatePlayersLocations(players: Player[]) {
@@ -369,7 +370,6 @@ class CoveyGameScene extends Phaser.Scene {
         /* const isPrivate = transporter.getData('type') as string;
         if (isPrivate === 'private'){
         
-
           
         } */
         // const publicMaxOccupancy = 1;
@@ -399,10 +399,8 @@ onChange={() => handleJoin(transporter)}>Join</Button> */
         
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
-
           // display();
-          /* this.add
-          .text(150, 150, `Private room. Please enter password! `, {
+          const message = this.add.text(150, 150, `Private room. Please enter password! `, {
             font: '18px monospace',
             color: '#000000',
             padding: {
@@ -412,15 +410,36 @@ onChange={() => handleJoin(transporter)}>Join</Button> */
             backgroundColor: '#ffffff',
           })
           .setScrollFactor(0)
-          .setDepth(30); */
+          .setDepth(30); 
+
+          this.input.on('pointerdown', () => {
+              message.text = ' '
+          })
+
+          const {text} = message;
+
+          if (text.toString() !== 'admin'){
+            this.add.text(200, 200, `Incorrect password `, {
+                font: '18px monospace',
+                color: '#000000',
+                padding: {
+                  x: 20,
+                  y: 10
+                },
+                backgroundColor: '#ffffff',
+              })
+              .setScrollFactor(0)
+              .setDepth(30); 
+              return;
+          } 
+
+
 
 
           // this.add.dom(300,300, 'div', 'background-color: lime; width: 220px; height: 100px; font: 48px Arial', 'Phaser');
           this.add.dom(300, 300).createFromCache('passwordForm');
           const element = this.add.dom(150, 150).createFromCache('passwordForm');
-          console.log(element)
           element.addListener('submit');
-      
           element.on('submit',  (event: { target: { name: string; }; }) => {
       
               if (event.target.name === 'submit')
@@ -584,8 +603,12 @@ export default function WorldMap(): JSX.Element {
     emitMovement, players, emitJoinRequest,
   } = useCoveyAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
+  
   useEffect(() => {
     const config = {
+        dom: {
+            createContainer: true
+        },
       type: Phaser.AUTO,
       parent: 'map-container',
       minWidth: 800,
@@ -615,6 +638,7 @@ export default function WorldMap(): JSX.Element {
     };
   }, [video, emitMovement]);
 
+
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {
     gameScene?.updatePlayersLocations(players);
@@ -622,6 +646,3 @@ export default function WorldMap(): JSX.Element {
 
   return <div id="map-container"/>;
 }
-
-
-
