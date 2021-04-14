@@ -64,6 +64,8 @@ export default class CoveyTownController {
       friendlyName: hubController.friendlyName,
       password: hubController.hubUpdatePassword,
       isPubliclyListed: hubController.isPubliclyListed,
+      occupancy: hubController.occupancy,
+      capacity: hubController.capacity
     }));
   }
 
@@ -230,6 +232,8 @@ export default class CoveyTownController {
         friendlyName: hubController.friendlyName,
         password: hubController.hubUpdatePassword,
         isPubliclyListed: hubController.isPubliclyListed,
+        occupancy: hubController.occupancy,
+        capacity: hubController.capacity,
       }));
   }
 }

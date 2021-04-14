@@ -52,13 +52,16 @@ export interface TownCreateResponse {
   coveyTownPassword: string;
   hubs: CoveyHubList,
 }
-
 export interface HubListRequest{
   coveyTownID: string;
   coveyHubID:number;
   coveyHubPassword:string;
 }
 
+export interface HubJoinRequest{
+  coveyTownID: string;
+  coveyHubID:number;
+}
 export interface HubListResponse {
  // hubs: CoveyHubList,
   isAuthenticated:boolean,
@@ -174,6 +177,41 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
  
   }
 
+  export async function hubJoinRequestHandler(requestData: HubJoinRequest): Promise<ResponseEnvelope<HubListResponse>> {
+    const townsStore = CoveyTownsStore.getInstance();
+    const townController=townsStore.getControllerForTown(requestData.coveyTownID);
+  
+    if (!townController) {
+      return {
+        isOK: false,
+        message: 'Error: No such town exists.',
+      };
+    }
+    const hubs=townController.hubsList;
+    const currentHub=hubs.find(eachHub=>eachHub.coveyHubID==requestData.coveyHubID);
+    if(currentHub){
+      console.log("occupancy before " + currentHub.occupancy);
+      if(currentHub.occupancy<currentHub.capacity){
+        currentHub.occupancy = currentHub.occupancy + 1;
+        console.log("occupancy after " + currentHub.occupancy);
+        return {
+          isOK:true,
+          response:{isAuthenticated:true},
+        };
+      }
+      
+      return{
+        isOK:false,
+        response:{isAuthenticated:false},
+        
+      }
+    }
+    return {
+      isOK: false,
+      message: 'Error: No such town exists.',
+    };
+   
+    }
 export async function townCreateHandler(requestData: TownCreateRequest): Promise<ResponseEnvelope<TownCreateResponse>> {
   const townsStore = CoveyTownsStore.getInstance();
   if (requestData.friendlyName.length === 0) {

@@ -380,66 +380,25 @@ onChange={() => handleJoin(transporter)}>Join</Button> */
 
         if(cursorKeys.space.isDown && this.player){
         
+
+
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
   
           console.log(this.video.coveyTownID);
-          const response=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID}).;
-          console.log(response.hubs.length);
-           display();
-          /* this.add
-          .text(150, 150, `Private room. Please enter password! `, {
-            font: '18px monospace',
-            color: '#000000',
-            padding: {
-              x: 20,
-              y: 10
-            },
-            backgroundColor: '#ffffff',
-          })
-          .setScrollFactor(0)
-          .setDepth(30); */
+          // const response=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:" "});
 
-
-          // this.add.dom(300,300, 'div', 'background-color: lime; width: 220px; height: 100px; font: 48px Arial', 'Phaser');
-          this.add.dom(300, 300).createFromCache('passwordForm');
-          const element = this.add.dom(150, 150).createFromCache('passwordForm');
-          console.log(element)
-          element.addListener('submit');
-      
-          element.on('submit',  (event: { target: { name: string; }; }) => {
-      
-              if (event.target.name === 'submit')
-              {
-                  const inputText =  this.children.getByName('password');
-
-      
-                  //  Have they entered anything?
-                  if (inputText)
-                  {
-                        // 
-                  }
-                  else
-                  {
-                      //  Flash the prompt
-                      this.tweens.add({
-                          targets: Text,
-                          alpha: 0.2,
-                          duration: 250,
-                          ease: 'Power3',
-                          yoyo: true
-                      });
-                  }
-              }
-      
-          });
+          // console.log(response);
+          const occupancyResponse = await this.apiClientService.checkCapcity({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});
+          console.log(hubID)
+          console.log(occupancyResponse);
+          
+   
   
 
-          // window.alert("Private room. Please enter password!");
-          
-          // alert("Please enter password to enter Private Hub");
 
-          return;
+
+          
         }
 
         const transportTargetID = transporter.getData('target') as number;

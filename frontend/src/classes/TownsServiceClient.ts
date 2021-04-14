@@ -78,7 +78,7 @@ export interface TownListResponse {
 }
 
 export interface HubListResponse {
-  //hubs: CoveyHubInfo[];
+  // hubs: CoveyHubInfo[];
   isAuthenticated:boolean,
 }
 /**
@@ -93,6 +93,11 @@ export interface HubListRequest{
   coveyTownID: string;
   coveyHubID:number;
   coveyHubPassword:string;
+}
+
+export interface HubJoinRequest{
+  coveyTownID: string;
+  coveyHubID:number;
 }
 /**
  * Payload sent by the client to update a Town.
@@ -169,6 +174,12 @@ export default class TownsServiceClient {
 
   async listHubs(requestData: HubListRequest): Promise<HubListResponse> {
     const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/hubs', requestData);
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+
+  
+  async checkCapcity(requestData: HubJoinRequest): Promise<HubListResponse> {
+    const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/hubJoinRequest', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 

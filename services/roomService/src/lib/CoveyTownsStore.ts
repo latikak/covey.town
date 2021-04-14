@@ -47,6 +47,8 @@ export default class CoveyTownsStore {
       friendlyName: hubController.friendlyName,
       password: hubController.hubUpdatePassword,
       isPubliclyListed:hubController.isPubliclyListed,
+      capacity: hubController.capacity,
+      occupancy: hubController.occupancy,
     }));
   }
   

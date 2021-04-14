@@ -39,6 +39,7 @@ export default class CoveyHubController {
     return this._occupancy;
   }
 
+
   get friendlyName(): string {
     return this._friendlyName;
   }
@@ -86,7 +87,7 @@ export default class CoveyHubController {
   constructor(friendlyName: string, isPubliclyListed: boolean, coveyTownID: string, coveyHubID: number) {
     this._coveyHubID = coveyHubID;
     this._coveyTownID = coveyTownID;
-    this._capacity = 50;
+    this._capacity = 1;
     this._hubUpdatePassword = nanoid(24);
     this._isPubliclyListed = isPubliclyListed;
     this._friendlyName = friendlyName;

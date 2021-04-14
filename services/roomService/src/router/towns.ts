@@ -10,6 +10,7 @@ import {
   townSubscriptionHandler,
   townUpdateHandler,
   hubRequestHandler,
+  hubJoinRequestHandler,
 } from '../requestHandlers/CoveyTownRequestHandlers';
 import { logError } from '../Utils';
 import { hubListHandler } from '../requestHandlers/CoveyHubRequestHandlers';
@@ -95,6 +96,22 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
     }
   });
 
+  app.post('/hubJoinRequest', BodyParser.json(), async (_req, res) => {
+    try {
+      const result = await hubJoinRequestHandler({
+        coveyTownID:_req.body.coveyTownID,
+        coveyHubID:_req.body.coveyHubID,
+      });
+      res.status(StatusCodes.OK)
+        .json(result);
+    } catch (err) {
+      logError(err);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({
+          message: 'Internal server error, please see log in server for more details',
+        });
+    }
+  });
   /**
    * Create a town
    */
