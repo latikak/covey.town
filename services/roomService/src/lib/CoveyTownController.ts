@@ -52,8 +52,19 @@ export default class CoveyTownController {
     return this._coveyTownID;
   }
 
+  
   get hubs(): CoveyHubController[] {
     return this._hubs; 
+  } 
+
+  get hubsList(): CoveyHubList {
+  return this._hubs
+    .map(hubController => ({
+      coveyHubID: hubController.coveyHubID,
+      friendlyName: hubController.friendlyName,
+      password: hubController.hubUpdatePassword,
+      isPubliclyListed: hubController.isPubliclyListed,
+    }));
   }
 
   /** The List of Hubs in the town */

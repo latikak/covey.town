@@ -9,6 +9,7 @@ import {
   townListHandler,
   townSubscriptionHandler,
   townUpdateHandler,
+  hubRequestHandler,
 } from '../requestHandlers/CoveyTownRequestHandlers';
 import { logError } from '../Utils';
 import { hubListHandler } from '../requestHandlers/CoveyHubRequestHandlers';
@@ -76,9 +77,13 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
   /**
   * List all hubs in a town
   */
-  app.get('/towns/:townID/hubs', BodyParser.json(), async (_req, res) => {
+  app.post('/hubs', BodyParser.json(), async (_req, res) => {
     try {
-      const result = await hubListHandler();
+      const result = await hubRequestHandler({
+        coveyTownID:_req.body.coveyTownID,
+        coveyHubID:_req.body.coveyHubID,
+        coveyHubPassword:_req.body.coveyHubPassword,
+      });
       res.status(StatusCodes.OK)
         .json(result);
     } catch (err) {

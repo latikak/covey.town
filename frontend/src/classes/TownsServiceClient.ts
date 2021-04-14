@@ -12,6 +12,16 @@ export interface TownJoinRequest {
   coveyTownID: string;
 }
 
+/**
+ * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware
+ */
+ export interface PrivateHubRequest {
+  /** userName of the player that would like to join * */
+  hubId: number;
+  /** ID of the town that the player would like to join * */
+  password: string;
+}
+
 
 /**
  * The format of a response to join a Town in Covey.Town, as returned by the handler to the server
@@ -67,6 +77,10 @@ export interface TownListResponse {
   towns: CoveyTownInfo[];
 }
 
+export interface HubListResponse {
+  //hubs: CoveyHubInfo[];
+  isAuthenticated:boolean,
+}
 /**
  * Payload sent by the client to delete a Town
  */
@@ -75,6 +89,11 @@ export interface TownDeleteRequest {
   coveyTownPassword: string;
 }
 
+export interface HubListRequest{
+  coveyTownID: string;
+  coveyHubID:number;
+  coveyHubPassword:string;
+}
 /**
  * Payload sent by the client to update a Town.
  * N.B., JavaScript is terrible, so:
@@ -145,6 +164,11 @@ export default class TownsServiceClient {
 
   async listTowns(): Promise<TownListResponse> {
     const responseWrapper = await this._axios.get<ResponseEnvelope<TownListResponse>>('/towns');
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+
+  async listHubs(requestData: HubListRequest): Promise<HubListResponse> {
+    const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/hubs', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
