@@ -53,6 +53,17 @@ export interface TownCreateResponse {
   hubs: CoveyHubList,
 }
 
+export interface HubListRequest{
+  coveyTownID: string;
+  coveyHubID:number;
+  coveyHubPassword:string;
+}
+
+export interface HubListResponse {
+ // hubs: CoveyHubList,
+  isAuthenticated:boolean,
+}
+
 /**
  * Response from the server for a Town list request
  */
@@ -107,6 +118,7 @@ export async function townJoinHandler(requestData: TownJoinRequest): Promise<Res
       message: 'Error: No such town',
     };
   }
+
   const newPlayer = new Player(requestData.userName);
   const newSession = await coveyTownController.addPlayer(newPlayer);
   assert(newSession.videoToken);
@@ -131,6 +143,37 @@ export async function townListHandler(): Promise<ResponseEnvelope<TownListRespon
   };
 }
 
+export async function hubRequestHandler(requestData: HubListRequest): Promise<ResponseEnvelope<HubListResponse>> {
+  const townsStore = CoveyTownsStore.getInstance();
+  const townController=townsStore.getControllerForTown(requestData.coveyTownID);
+
+  if (!townController) {
+    return {
+      isOK: false,
+      message: 'Error: No such town exists.',
+    };
+  }
+  const hubs=townController.hubsList;
+  const currentHub=hubs.find(eachHub=>eachHub.coveyHubID==requestData.coveyHubID);
+  if(currentHub){
+    if(requestData.coveyHubPassword==currentHub.password)
+    return {
+      isOK:true,
+      response:{isAuthenticated:true},
+    };
+    return{
+      isOK:false,
+      response:{isAuthenticated:false},
+      
+    }
+  }
+  return {
+    isOK: false,
+    message: 'Error: No such town exists.',
+  };
+ 
+  }
+
 export async function townCreateHandler(requestData: TownCreateRequest): Promise<ResponseEnvelope<TownCreateResponse>> {
   const townsStore = CoveyTownsStore.getInstance();
   if (requestData.friendlyName.length === 0) {
@@ -139,6 +182,9 @@ export async function townCreateHandler(requestData: TownCreateRequest): Promise
       message: 'FriendlyName must be specified',
     };
   }
+
+
+    
   const newTown= townsStore.createTown(requestData.friendlyName, requestData.isPubliclyListed);
   return {
     isOK: true,

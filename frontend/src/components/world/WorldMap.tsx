@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Phaser, { Display } from 'phaser';
-import {toast} from 'react-toastify'; 
 import { Input, Box, Button, Flex, FormControl, FormLabel, Heading } from '@chakra-ui/react';
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
+import TownsServiceClient from '../../classes/TownsServiceClient';
 // Importing toastify module
     
  // toast-configuration method, 
@@ -39,14 +39,23 @@ class CoveyGameScene extends Phaser.Scene {
 
   private video: Video;
 
+  // private hubInfo:{
+    // friendlyName: string,
+    // isPubliclyListed: boolean
+  // };
+
 
 
   private emitMovement: (loc: UserLocation) => void;
 
-  constructor(video: Video, emitMovement: (loc: UserLocation) => void) {
+  private apiClientService:TownsServiceClient;
+
+
+  constructor(video: Video, emitMovement: (loc: UserLocation) => void,apiClient:TownsServiceClient) {
     super('PlayGame');
     this.video = video;
     this.emitMovement = emitMovement;
+    this.apiClientService=apiClient;
   }
 
   preload() {
@@ -327,34 +336,6 @@ class CoveyGameScene extends Phaser.Scene {
       label
     };
 
-    function handleJoin( transporter: unknown): void {
-      try {
-        const townIDToJoin = ' '
-        if (!townIDToJoin || townIDToJoin.length === 0) {
-          toast({
-            title: 'Unable to join hub',
-            description: 'Please enter a password',
-            status: 'error',
-          });
-          return;
-        }
-
-        // const password = transporter.getData('password') as string;
-        if(townIDToJoin === ' '){
-          toast({
-            title: 'You can now enter the hub',
-            status: 'success'
-          })
-        }
-      } catch (err) {
-        toast({
-          title: 'Unable to connect to Hubs',
-          description: err.toString(),
-          status: 'error'
-        })
-      }
-    }
-
     
 
     /* Configure physics overlap behavior for when the player steps into
@@ -364,14 +345,16 @@ class CoveyGameScene extends Phaser.Scene {
      */
 
     this.physics.add.overlap(sprite, transporters,
-      (overlappingObject, transporter)=>{
+      async (overlappingObject, transporter)=>{
         // const hubID = transporter.getData('hubID') as number;
-        /* const isPrivate = transporter.getData('type') as string;
-        if (isPrivate === 'private'){
-        
-
+        // const isPrivate = transporter.getData('type') as string;
+        // if (isPrivate === 'private'){
+          // this.hubInfo.friendlyName='Sample';
+          // this.hubInfo.isPubliclyListed=true;
+          // const response=await this.apiClientService.createTown(this.hubInfo);
+          // console.log(response);
           
-        } */
+        // } 
         // const publicMaxOccupancy = 1;
         // let privateMaxOccupancy = 1;
 
@@ -399,8 +382,11 @@ onChange={() => handleJoin(transporter)}>Join</Button> */
         
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
-
-          // display();
+  
+          console.log(this.video.coveyTownID);
+          const response=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID}).;
+          console.log(response.hubs.length);
+           display();
           /* this.add
           .text(150, 150, `Private room. Please enter password! `, {
             font: '18px monospace',
@@ -581,7 +567,7 @@ onChange={() => handleJoin(transporter)}>Join</Button> */
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   const {
-    emitMovement, players, emitJoinRequest,
+    emitMovement, players, emitJoinRequest,apiClient
   } = useCoveyAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
   useEffect(() => {
@@ -600,7 +586,7 @@ export default function WorldMap(): JSX.Element {
 
     const game = new Phaser.Game(config);
     if (video) {
-      const newGameScene = new CoveyGameScene(video, emitMovement);
+      const newGameScene = new CoveyGameScene(video, emitMovement,apiClient);
       setGameScene(newGameScene);
       game.scene.add('coveyBoard', newGameScene, true);
       video.pauseGame = () => {
