@@ -28,8 +28,6 @@ const TownSettings: React.FunctionComponent = () => {
   const [friendlyName, setFriendlyName] = useState<string>(currentTownFriendlyName);
   const [isPubliclyListed, setIsPubliclyListed] = useState<boolean>(currentTownIsPubliclyListed);
   const [roomUpdatePassword, setRoomUpdatePassword] = useState<string>('');
-  const [hubEnterPassword, setHubPassword] = useState<string>('');
-
 
   const openSettings = useCallback(()=>{
     onOpen();
@@ -42,27 +40,6 @@ const TownSettings: React.FunctionComponent = () => {
   }, [onClose, video]);
 
   const toast = useToast()
-
-  const processHubPassword = async (action: string) =>{
-    if(action === 'enter'){ 
-      if (hubEnterPassword === 'admin')
-      {
-        toast({
-        title: 'Correct Password',
-        description: 'You can now enter the hub',
-        status: 'success'
-      })
-    }
-    else {
-      toast({
-        title: 'Incorrect Password',
-        description: 'Please enter a correct password to join the hub.',
-        status: 'error'
-      });
-    }
-      // 
-  }};
-
   const processUpdates = async (action: string) =>{
     if(action === 'delete'){
       try{
@@ -128,10 +105,6 @@ const TownSettings: React.FunctionComponent = () => {
               <FormLabel htmlFor="updatePassword">Town Update Password</FormLabel>
               <Input data-testid="updatePassword" id="updatePassword" placeholder="Password" name="password" type="password" value={roomUpdatePassword} onChange={(e)=>setRoomUpdatePassword(e.target.value)} />
             </FormControl>
-            <FormControl mt={4}>
-              <FormLabel htmlFor='hub'>Joining a hub? Enter password here:</FormLabel>
-              <Input id="hub" name="hub"  placeholder="HUB Password" type="password" value={hubEnterPassword} onChange={(e)=>setHubPassword(e.target.value)} />
-            </FormControl>
           </ModalBody>
 
           <ModalFooter>
@@ -141,15 +114,13 @@ const TownSettings: React.FunctionComponent = () => {
             <Button data-testid='updatebutton' colorScheme="blue" mr={3} value="update" name='action2' onClick={()=>processUpdates('edit')}>
               Update
             </Button>
-            <Button data-testid='hubbutton' colorScheme="green" mr={3} value="hub" name='action3' onClick={()=>processHubPassword('enter')}>
-              Join
-            </Button>
             <Button onClick={closeSettings}>Cancel</Button>
           </ModalFooter>
         </form>
       </ModalContent>
     </Modal>
-
-    </>
+  </>
 }
+
+
 export default TownSettings;
