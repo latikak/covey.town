@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {   FormControl,
   FormLabel,
-  FormHelperText,Button , Input,useToast } from '@chakra-ui/react';
+  FormHelperText,Button , Input,useToast, useDisclosure,Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton, } from '@chakra-ui/react';
 import Phaser from 'phaser';
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
@@ -510,6 +516,7 @@ export default function WorldMap(): JSX.Element {
   const [currentHubId, setCurrentHubId] = useState(0);
   const [password, setPrivatePassword] = useState('');
   const [isAuthenticated, passwordCheckDone] = useState(false);
+  
   useEffect(() => {
     const config = {
       type: Phaser.AUTO,
@@ -580,12 +587,24 @@ export default function WorldMap(): JSX.Element {
   return (
     
       <div id="map-container">
-        {isPrivate && <FormControl id="email">
-        <FormLabel>password</FormLabel>
+
+<Modal isOpen={isPrivate} onClose={()=>setIsPrivate(!isPrivate)}>
+  <ModalOverlay />
+  <ModalContent>
+    <ModalHeader>Please enter password for this Hub:</ModalHeader>
+    <ModalCloseButton />
+    <ModalBody>
+    <FormLabel>password</FormLabel>
         <Input type="password" value={password} onChange={event => setPrivatePassword(event.target.value)} />
-        <Button onClick={()=>authenticatePassword(password)}>Submit</Button>
-        <FormHelperText>Enter Password</FormHelperText>
-        </FormControl>}
+    </ModalBody>
+
+    <ModalFooter>
+      <Button colorScheme="blue" mr={3}  onClick={()=>authenticatePassword(password)}>
+        Submit
+      </Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
         </div>
   );
 }
