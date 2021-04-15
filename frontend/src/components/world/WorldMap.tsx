@@ -384,6 +384,8 @@ class CoveyGameScene extends Phaser.Scene {
 
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
+
+         
   
           this.add
           .text(150, 150, `Private room. Please enter password!. Click on Town Settings button to change the password.`, {
@@ -400,12 +402,16 @@ class CoveyGameScene extends Phaser.Scene {
           // Post the current Hub Id
           // console.log(this.video.coveyTownID);
           // console.log(hubID);
-          // await this.apiClientService.postHubId({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});          
-         // console.log(response);
-            // const responsePassword=await this.apiClientService.getPassword({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});
-           const responsePasswordCheck=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:"HSjskjjsjkjskjsjkjsjksj"});
+          // Posts Hub ID - no errors on this - Tahseen
+         //  const response = await this.apiClientService.postHubId({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});          
+          // console.log("Hub post" + response);
+         // const responsePassword=await this.apiClientService.getPassword({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});
+
+         // Grab Password from form and this works! - Tahseen
+            const responsePasswordCheck=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:"Sample"});
            console.log(responsePasswordCheck);
-          
+
+          /*
           this.add.dom(300, 300).createFromCache('passwordForm');
           const element = this.add.dom(150, 150).createFromCache('passwordForm');
           console.log(element)
@@ -436,7 +442,7 @@ class CoveyGameScene extends Phaser.Scene {
                   }
               }
       
-          });
+          }); */
   
 
           // window.alert("Private room. Please enter password!");
