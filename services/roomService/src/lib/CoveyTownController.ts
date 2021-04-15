@@ -23,6 +23,21 @@ export default class CoveyTownController {
   set isPubliclyListed(value: boolean) {
     this._isPubliclyListed = value;
   }
+  get current_HubId(): number {
+    return this._current_HubId;
+  }
+
+  set current_HubId(value: number) {
+    this._current_HubId = value;
+  }
+  get current_HubId_password(): string {
+    return this._current_HubId_password;
+  }
+
+  set current_HubId_password(value: string) {
+    this._current_HubId_password = value;
+  }
+
 
   get isPubliclyListed(): boolean {
     return this._isPubliclyListed;
@@ -64,8 +79,13 @@ export default class CoveyTownController {
       friendlyName: hubController.friendlyName,
       password: hubController.hubUpdatePassword,
       isPubliclyListed: hubController.isPubliclyListed,
+      occupancy: hubController.occupancy,
+      capacity: hubController.capacity
     }));
   }
+  private _current_HubId: number;
+
+  private _current_HubId_password:string;
 
   /** The List of Hubs in the town */
   private _hubs: CoveyHubController[] = [];
@@ -114,6 +134,8 @@ export default class CoveyTownController {
     this._hubs.push(privHub5);
     const privHub6 = hubsStore.createHub('House_6', false, this._coveyTownID, 6 );
     this._hubs.push(privHub6); 
+    this._current_HubId=0;
+    this._current_HubId_password='Sample';
     // const privHub6 = hubsStore.createHub('House_6', true, this._coveyTownID );
     // this._hubs.push(privHub6); */
     
@@ -230,6 +252,8 @@ export default class CoveyTownController {
         friendlyName: hubController.friendlyName,
         password: hubController.hubUpdatePassword,
         isPubliclyListed: hubController.isPubliclyListed,
+        occupancy: hubController.occupancy,
+        capacity: hubController.capacity,
       }));
   }
 }

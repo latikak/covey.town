@@ -36,6 +36,9 @@ type CoveyAppUpdate =
   | { action: 'joinRequest'; data: { emitJoinRequest: (hubID: number, townIsPubliclyListed:boolean,  occupancy : number, password?: string ,) => boolean}}
   ;
 
+type CoveyHubUpdate =
+{ type: 'field'; fieldName: string; payload: string };
+
 function defaultAppState(): CoveyAppState {
   return {
     nearbyPlayers: { nearbyPlayers: [] },
@@ -56,6 +59,8 @@ function defaultAppState(): CoveyAppState {
     apiClient: new TownsServiceClient(),
   };
 }
+
+
 function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyAppState {
   const nextState = {
     sessionToken: state.sessionToken,

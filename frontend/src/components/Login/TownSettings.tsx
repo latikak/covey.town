@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState ,useReducer,useEffect} from 'react';
 
 import {
   Button,
@@ -20,14 +20,52 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import useMaybeVideo from '../../hooks/useMaybeVideo';
+import TownsServiceClient from '../../classes/TownsServiceClient';
 
-const TownSettings: React.FunctionComponent = () => {
+const initialState: CoveyHubPassword = {
+  password: '',
+};
+
+interface CoveyHubPassword {
+  password: string;
+}
+
+type CoveyHubAction =
+  | { type: 'field'; fieldName: string; payload: string };
+
+function loginReducer(state: CoveyHubPassword, action: CoveyHubAction) {
+  switch (action.type) {
+    case 'field': {
+      return {
+        ...state,
+        [action.fieldName]: action.payload,
+      };
+    }
+    default:
+      return state;
+  }
+}
+
+const TownSettings: React.FunctionComponent =() => {
+  const [state, dispatch] = useReducer(loginReducer, initialState);
+  const {password } = state;
   const {isOpen, onOpen, onClose} = useDisclosure()
   const video = useMaybeVideo()
   const {apiClient, currentTownID, currentTownFriendlyName, currentTownIsPubliclyListed} = useCoveyAppState();
   const [friendlyName, setFriendlyName] = useState<string>(currentTownFriendlyName);
   const [isPubliclyListed, setIsPubliclyListed] = useState<boolean>(currentTownIsPubliclyListed);
   const [roomUpdatePassword, setRoomUpdatePassword] = useState<string>('');
+  const [hubEnterPassword, setHubPassword] = useState<string>('');
+  
+  let currentHubId:number;
+  
+  useEffect(() => {
+    const getCurrentHubId = async () =>{
+      const response=await apiClient.getHubId({coveyTownID:currentTownID});
+     currentHubId=response.coveyHubID;
+     return currentHubId;
+    };
+  }, []);
 
   const openSettings = useCallback(()=>{
     onOpen();
@@ -40,6 +78,27 @@ const TownSettings: React.FunctionComponent = () => {
   }, [onClose, video]);
 
   const toast = useToast()
+
+  const processHubPassword = async (action: string) =>{
+    if(action === 'enter'){ 
+      if (password === 'admin')
+      {
+        toast({
+        title: 'Correct Password',
+        description: 'You can now enter the hub',
+        status: 'success'
+      })
+    }
+    else {
+      toast({
+        title: 'Incorrect Password',
+        description: 'Please enter a correct password to access the hub.',
+        status: 'error'
+      });
+    }
+      // 
+  }};
+
   const processUpdates = async (action: string) =>{
     if(action === 'delete'){
       try{
@@ -105,8 +164,17 @@ const TownSettings: React.FunctionComponent = () => {
               <FormLabel htmlFor="updatePassword">Town Update Password</FormLabel>
               <Input data-testid="updatePassword" id="updatePassword" placeholder="Password" name="password" type="password" value={roomUpdatePassword} onChange={(e)=>setRoomUpdatePassword(e.target.value)} />
             </FormControl>
+            <FormControl mt={4}>
+              <FormLabel htmlFor='hub'>Joining a hub? Enter password here:</FormLabel>
+              <Input id="hub" name="hub"  placeholder="HUB Password" type="password" value={password} onChange={(e) =>
+                dispatch({
+                  type: 'field',
+                  fieldName: 'password',
+                  payload: e.currentTarget.value,
+                })
+              } />
+            </FormControl>
           </ModalBody>
-
           <ModalFooter>
             <Button data-testid='deletebutton' colorScheme="red" mr={3} value="delete" name='action1' onClick={()=>processUpdates('delete')}>
               Delete
@@ -114,13 +182,15 @@ const TownSettings: React.FunctionComponent = () => {
             <Button data-testid='updatebutton' colorScheme="blue" mr={3} value="update" name='action2' onClick={()=>processUpdates('edit')}>
               Update
             </Button>
+            <Button data-testid='hubbutton' colorScheme="green" mr={3} value="hub" name='action3' onClick={(event)=>apiClient.postPassword({coveyTownID:currentTownID,coveyHubID:currentHubId,coveyHubPassword:password})}>
+              Join
+            </Button>
             <Button onClick={closeSettings}>Cancel</Button>
           </ModalFooter>
         </form>
       </ModalContent>
     </Modal>
-  </>
+
+    </>
 }
-
-
 export default TownSettings;

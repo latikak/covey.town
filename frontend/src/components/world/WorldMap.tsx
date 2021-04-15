@@ -371,7 +371,7 @@ class CoveyGameScene extends Phaser.Scene {
           window.alert(`Hospital has Id 305 occupancy is ${this.currentHospitalOccupants}`);
         }
                         /* <Button data-testid='joinTownByIDButton'
-onChange={() => handleJoin(transporter)}>Join</Button> */
+        onChange={() => handleJoin(transporter)}>Join</Button> */
         
         /*
         else if (objID === 308) {
@@ -380,15 +380,13 @@ onChange={() => handleJoin(transporter)}>Join</Button> */
 
         if(cursorKeys.space.isDown && this.player){
         
+
+
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
   
-          console.log(this.video.coveyTownID);
-          const response=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID}).;
-          console.log(response.hubs.length);
-           display();
-          /* this.add
-          .text(150, 150, `Private room. Please enter password! `, {
+          this.add
+          .text(150, 150, `Private room. Please enter password!. Click on Town Settings button to change the password.`, {
             font: '18px monospace',
             color: '#000000',
             padding: {
@@ -398,10 +396,16 @@ onChange={() => handleJoin(transporter)}>Join</Button> */
             backgroundColor: '#ffffff',
           })
           .setScrollFactor(0)
-          .setDepth(30); */
-
-
-          // this.add.dom(300,300, 'div', 'background-color: lime; width: 220px; height: 100px; font: 48px Arial', 'Phaser');
+          .setDepth(30);
+          // Post the current Hub Id
+          // console.log(this.video.coveyTownID);
+          // console.log(hubID);
+          // await this.apiClientService.postHubId({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});          
+         // console.log(response);
+            // const responsePassword=await this.apiClientService.getPassword({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});
+           const responsePasswordCheck=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:"HSjskjjsjkjskjsjkjsjksj"});
+           console.log(responsePasswordCheck);
+          
           this.add.dom(300, 300).createFromCache('passwordForm');
           const element = this.add.dom(150, 150).createFromCache('passwordForm');
           console.log(element)
