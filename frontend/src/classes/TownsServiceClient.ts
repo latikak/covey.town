@@ -12,6 +12,15 @@ export interface TownJoinRequest {
   coveyTownID: string;
 }
 
+export interface HubListCurrentHubIdRequest{
+  coveyTownID: string;
+}
+
+export interface CurrentHubRequest {
+  coveyTownID: string;
+  coveyHubID:number;
+ }
+
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware
  */
@@ -43,6 +52,9 @@ export interface TownJoinResponse {
   /** Is this a private town? * */
   isPubliclyListed: boolean;
 }
+export interface CurrentHubPasswordResponse {
+  coveyHubPassword:string
+ }
 
 /**
  * Payload sent by client to create a Town in Covey.Town
@@ -81,6 +93,11 @@ export interface HubListResponse {
   // hubs: CoveyHubInfo[];
   isAuthenticated:boolean,
 }
+
+export interface HubIdCurrentResponse {
+  // hubs: CoveyHubList,
+  coveyHubID:number,
+ }
 /**
  * Payload sent by the client to delete a Town
  */
@@ -97,7 +114,7 @@ export interface HubListRequest{
 
 export interface HubJoinRequest{
   coveyTownID: string;
-  coveyHubID:number;
+  coveyHubPassword:string;
 }
 /**
  * Payload sent by the client to update a Town.
@@ -177,14 +194,34 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
-  
-  async checkCapcity(requestData: HubJoinRequest): Promise<HubListResponse> {
+  async checkPassword(requestData: HubJoinRequest): Promise<HubListResponse> {
     const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/hubJoinRequest', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
   async joinTown(requestData: TownJoinRequest): Promise<TownJoinResponse> {
     const responseWrapper = await this._axios.post('/sessions', requestData);
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+
+  
+  async postHubId(requestData: CurrentHubRequest): Promise<HubListResponse> {
+    const responseWrapper = await this._axios.post('/currentHubId', requestData);
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+
+  async getHubId(requestData: HubListCurrentHubIdRequest): Promise<HubIdCurrentResponse> {
+    const responseWrapper = await this._axios.post('/currentHubIdRequest', requestData);
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+  
+  async postPassword(requestData: HubListRequest): Promise<HubListResponse> {
+    const responseWrapper = await this._axios.post('/currentPassword', requestData);
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+
+  async getPassword(requestData: CurrentHubRequest): Promise<CurrentHubPasswordResponse> {
+    const responseWrapper = await this._axios.post('/currentPasswordRequest', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 

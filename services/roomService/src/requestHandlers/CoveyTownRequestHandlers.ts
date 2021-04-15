@@ -57,15 +57,31 @@ export interface HubListRequest{
   coveyHubID:number;
   coveyHubPassword:string;
 }
+export interface HubListCurrentHubIdRequest{
+  coveyTownID: string;
+}
 
 export interface HubJoinRequest{
   coveyTownID: string;
-  coveyHubID:number;
+ // coveyHubID:number;
+  coveyHubPassword:string
 }
 export interface HubListResponse {
  // hubs: CoveyHubList,
   isAuthenticated:boolean,
 }
+
+export interface currentHubPasswordResponse {
+  coveyHubPassword:string
+ }
+export interface HubIdCurrentResponse {
+  // hubs: CoveyHubList,
+  coveyHubID:number,
+ }
+export interface currentHubRequest {
+  coveyTownID: string;
+  coveyHubID:number;
+ }
 
 /**
  * Response from the server for a Town list request
@@ -177,7 +193,8 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
  
   }
 
-  export async function hubJoinRequestHandler(requestData: HubJoinRequest): Promise<ResponseEnvelope<HubListResponse>> {
+  //TO POST the current Hub Id
+  export async function hubCurrentRequestHandler (requestData: currentHubRequest): Promise<ResponseEnvelope<HubListResponse>> {
     const townsStore = CoveyTownsStore.getInstance();
     const townController=townsStore.getControllerForTown(requestData.coveyTownID);
   
@@ -187,24 +204,13 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
         message: 'Error: No such town exists.',
       };
     }
-    const hubs=townController.hubsList;
-    const currentHub=hubs.find(eachHub=>eachHub.coveyHubID==requestData.coveyHubID);
-    if(currentHub){
-      console.log("occupancy before " + currentHub.occupancy);
-      if(currentHub.occupancy<currentHub.capacity){
-        currentHub.occupancy = currentHub.occupancy + 1;
-        console.log("occupancy after " + currentHub.occupancy);
-        return {
-          isOK:true,
-          response:{isAuthenticated:true},
-        };
-      }
-      
-      return{
-        isOK:false,
-        response:{isAuthenticated:false},
-        
-      }
+    townController.current_HubId=requestData.coveyHubID;
+  
+    if(townController.current_HubId!==0){
+      return {
+        isOK: true,
+        message: 'Current Hub Id has been updated.',
+      };
     }
     return {
       isOK: false,
@@ -212,6 +218,84 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
     };
    
     }
+
+    //To GET the current Hub Id
+    export async function hubCurretIdGetRequestHandler(requestData: HubListCurrentHubIdRequest): Promise<ResponseEnvelope<HubIdCurrentResponse>> {
+      const townsStore = CoveyTownsStore.getInstance();
+      const townController=townsStore.getControllerForTown(requestData.coveyTownID);
+    
+      if (!townController) {
+        return {
+          isOK: false,
+          message: 'Error: No such town exists.',
+        };
+      }
+     
+      if(townController){
+        return {
+          isOK:true,
+          response:{coveyHubID:townController.current_HubId},
+        };
+      }
+      return {
+        isOK: false,
+        message: 'Error: No such hub exists.',
+      };
+     
+    }
+
+  //To POST the current Password for the given Hub Id.
+  export async function hubPasswordStoreRequestHandler(requestData: HubListRequest): Promise<ResponseEnvelope<HubListResponse>> {
+    const townsStore = CoveyTownsStore.getInstance();
+    const townController=townsStore.getControllerForTown(requestData.coveyTownID);
+  
+    if (!townController) {
+      return {
+        isOK: false,
+        message: 'Error: No such town exists.',
+      };
+    }
+   
+    if(townController.current_HubId==requestData.coveyHubID){
+      townController.current_HubId_password=requestData.coveyHubPassword;
+      return {
+        isOK:true,
+        response:{isAuthenticated:true},
+      };
+    }
+      return{
+        isOK:false,
+        response:{isAuthenticated:false},
+        
+      }
+   
+    }
+
+    //To GET the current Password for the given Hub Id.
+  export async function hubPasswordRequestHandler (requestData: currentHubRequest): Promise<ResponseEnvelope<currentHubPasswordResponse>> {
+    const townsStore = CoveyTownsStore.getInstance();
+    const townController=townsStore.getControllerForTown(requestData.coveyTownID);
+  
+    if (!townController) {
+      return {
+        isOK: false,
+        message: 'Error: No such town exists.',
+      };
+    }
+     if(townController.current_HubId==requestData.coveyHubID){
+      return {
+        isOK:true,
+        response:{coveyHubPassword:townController.current_HubId_password},
+      };
+     }
+     return {
+      isOK: false,
+      message: 'Error: No such password exists.',
+    };
+    }
+   
+
+
 export async function townCreateHandler(requestData: TownCreateRequest): Promise<ResponseEnvelope<TownCreateResponse>> {
   const townsStore = CoveyTownsStore.getInstance();
   if (requestData.friendlyName.length === 0) {

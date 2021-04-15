@@ -371,7 +371,7 @@ class CoveyGameScene extends Phaser.Scene {
           window.alert(`Hospital has Id 305 occupancy is ${this.currentHospitalOccupants}`);
         }
                         /* <Button data-testid='joinTownByIDButton'
-onChange={() => handleJoin(transporter)}>Join</Button> */
+        onChange={() => handleJoin(transporter)}>Join</Button> */
         
         /*
         else if (objID === 308) {
@@ -385,20 +385,65 @@ onChange={() => handleJoin(transporter)}>Join</Button> */
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
   
-          console.log(this.video.coveyTownID);
-          // const response=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:" "});
-
-          // console.log(response);
-          const occupancyResponse = await this.apiClientService.checkCapcity({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});
-          console.log(hubID)
-          console.log(occupancyResponse);
+          this.add
+          .text(150, 150, `Private room. Please enter password!. Click on Town Settings button to change the password.`, {
+            font: '18px monospace',
+            color: '#000000',
+            padding: {
+              x: 20,
+              y: 10
+            },
+            backgroundColor: '#ffffff',
+          })
+          .setScrollFactor(0)
+          .setDepth(30);
+          // Post the current Hub Id
+          // console.log(this.video.coveyTownID);
+          // console.log(hubID);
+          // await this.apiClientService.postHubId({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});          
+         // console.log(response);
+            // const responsePassword=await this.apiClientService.getPassword({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});
+           const responsePasswordCheck=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:"HSjskjjsjkjskjsjkjsjksj"});
+           console.log(responsePasswordCheck);
           
-   
+          this.add.dom(300, 300).createFromCache('passwordForm');
+          const element = this.add.dom(150, 150).createFromCache('passwordForm');
+          console.log(element)
+          element.addListener('submit');
+      
+          element.on('submit',  (event: { target: { name: string; }; }) => {
+      
+              if (event.target.name === 'submit')
+              {
+                  const inputText =  this.children.getByName('password');
+
+      
+                  //  Have they entered anything?
+                  if (inputText)
+                  {
+                        // 
+                  }
+                  else
+                  {
+                      //  Flash the prompt
+                      this.tweens.add({
+                          targets: Text,
+                          alpha: 0.2,
+                          duration: 250,
+                          ease: 'Power3',
+                          yoyo: true
+                      });
+                  }
+              }
+      
+          });
   
 
-
-
+          // window.alert("Private room. Please enter password!");
           
+          // alert("Please enter password to enter Private Hub");
+
+          return;
         }
 
         const transportTargetID = transporter.getData('target') as number;
