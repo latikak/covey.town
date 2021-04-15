@@ -361,6 +361,7 @@ class CoveyGameScene extends Phaser.Scene {
             this.setIsPrivate(true);
           
           if(this.isAuthenticated){
+            this.setIsPrivate(false);
 
             if(cursorKeys.space.isDown && this.player){
 
@@ -381,6 +382,7 @@ class CoveyGameScene extends Phaser.Scene {
          }
          return;
         }
+        
     if (hubID === 4 || hubID === 7 ){
        const transportTargetID = transporter.getData('target') as number;
         const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
@@ -553,11 +555,12 @@ export default function WorldMap(): JSX.Element {
     gameScene?.updatePlayersLocations(players);
   }, [players, deepPlayers, gameScene]);
 
-  const authenticatePassword = async (passwordSubmit: string) =>{
+  const authenticatePassword = async (passwordSubmit: string  ) =>{
 
     const response=await apiClient.listHubs({coveyTownID: currentTownID,coveyHubID:currentHubId,coveyHubPassword:passwordSubmit});
     if(response.isAuthenticated){
       passwordCheckDone(true);
+      setIsPrivate(false);
       toast({
 
         title: 'Correct Password',
@@ -595,11 +598,11 @@ export default function WorldMap(): JSX.Element {
     <ModalCloseButton />
     <ModalBody>
     <FormLabel>password</FormLabel>
-        <Input type="password" value={password} onChange={event => setPrivatePassword(event.target.value)} />
+        <Input type="password" onChange={event => setPrivatePassword(event.target.value)} />
     </ModalBody>
 
     <ModalFooter>
-      <Button colorScheme="blue" mr={3}  onClick={()=>authenticatePassword(password)}>
+      <Button colorScheme="blue" mr={3}  onClick={(ev)=>{ev.preventDefault();authenticatePassword(password)}} >
         Submit
       </Button>
     </ModalFooter>
