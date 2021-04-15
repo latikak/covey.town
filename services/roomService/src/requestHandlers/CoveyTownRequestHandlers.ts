@@ -189,7 +189,7 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
     };
   }
   return {
-    isOK: false,
+    isOK: true,
     message: 'Error: No such town exists.',
   };
  
