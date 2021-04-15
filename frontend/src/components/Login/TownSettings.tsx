@@ -1,4 +1,5 @@
-import React, { useCallback, useState ,useReducer,useEffect} from 'react';
+import React, { useCallback, useState } from 'react';
+// import React, { useReducer,useEffect} from 'react';
 
 import {
   Button,
@@ -20,11 +21,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import useMaybeVideo from '../../hooks/useMaybeVideo';
-import TownsServiceClient from '../../classes/TownsServiceClient';
+// import TownsServiceClient from '../../classes/TownsServiceClient';
 
-const initialState: CoveyHubPassword = {
+/* const initialState: CoveyHubPassword = {
   password: '',
-};
+}; 
 
 interface CoveyHubPassword {
   password: string;
@@ -33,7 +34,7 @@ interface CoveyHubPassword {
 type CoveyHubAction =
   | { type: 'field'; fieldName: string; payload: string };
 
-function loginReducer(state: CoveyHubPassword, action: CoveyHubAction) {
+/* function loginReducer(state: CoveyHubPassword, action: CoveyHubAction) {
   switch (action.type) {
     case 'field': {
       return {
@@ -44,11 +45,11 @@ function loginReducer(state: CoveyHubPassword, action: CoveyHubAction) {
     default:
       return state;
   }
-}
+} */
 
 const TownSettings: React.FunctionComponent =() => {
-  const [state, dispatch] = useReducer(loginReducer, initialState);
-  const {password } = state;
+  // const [state, dispatch] = useReducer(loginReducer, initialState);
+  // const {password } = state;
   const {isOpen, onOpen, onClose} = useDisclosure()
   const video = useMaybeVideo()
   const {apiClient, currentTownID, currentTownFriendlyName, currentTownIsPubliclyListed} = useCoveyAppState();
@@ -57,16 +58,16 @@ const TownSettings: React.FunctionComponent =() => {
   const [roomUpdatePassword, setRoomUpdatePassword] = useState<string>('');
   const [hubEnterPassword, setHubPassword] = useState<string>('');
   
-  let currentHubId:number;
+  // let currentHubId:number;
   
-  useEffect(() => {
+  /* useEffect(() => {
     const getCurrentHubId = async () =>{
       const response=await apiClient.getHubId({coveyTownID:currentTownID});
      currentHubId=response.coveyHubID;
      console.log( currentHubId);
      return currentHubId;
     };
-  }, []);
+  }, []); */
 
   const openSettings = useCallback(()=>{
     onOpen();
@@ -82,7 +83,7 @@ const TownSettings: React.FunctionComponent =() => {
 
   const processHubPassword = async (action: string) =>{
     if(action === 'enter'){ 
-      if (password === 'admin')
+      if (hubEnterPassword === 'admin')
       {
         toast({
         title: 'Correct Password',
@@ -140,6 +141,17 @@ const TownSettings: React.FunctionComponent =() => {
       }
     }
   };
+  // <Button data-testid='hubbutton' colorScheme="green" mr={3} value="hub" name='action3' onClick={(event)=>apiClient.postPassword({coveyTownID:currentTownID,coveyHubID:currentHubId,coveyHubPassword:password})}>
+// <Input id="hub" name="hub"  placeholder="HUB Password" type="password" value={password} onChange={(e) =>
+/*
+              <Input id="hub" name="hub"  placeholder="HUB Password" type="password" value={hubEnterPassword} onChange={(e) =>
+                dispatch({
+                  type: 'field',
+                  fieldName: 'password',
+                  payload: e.currentTarget.value,
+                })
+              } />
+*/
 
   return <>
     <MenuItem data-testid='openMenuButton' onClick={openSettings}>
@@ -167,13 +179,7 @@ const TownSettings: React.FunctionComponent =() => {
             </FormControl>
             <FormControl mt={4}>
               <FormLabel htmlFor='hub'>Joining a hub? Enter password here:</FormLabel>
-              <Input id="hub" name="hub"  placeholder="HUB Password" type="password" value={password} onChange={(e) =>
-                dispatch({
-                  type: 'field',
-                  fieldName: 'password',
-                  payload: e.currentTarget.value,
-                })
-              } />
+              <Input id="hub" name="hub"  placeholder="HUB Password" type="password" value={hubEnterPassword} onChange={(e) =>setHubPassword(e.target.value)} />
             </FormControl>
           </ModalBody>
           <ModalFooter>
@@ -183,7 +189,8 @@ const TownSettings: React.FunctionComponent =() => {
             <Button data-testid='updatebutton' colorScheme="blue" mr={3} value="update" name='action2' onClick={()=>processUpdates('edit')}>
               Update
             </Button>
-            <Button data-testid='hubbutton' colorScheme="green" mr={3} value="hub" name='action3' onClick={(event)=>apiClient.postPassword({coveyTownID:currentTownID,coveyHubID:currentHubId,coveyHubPassword:password})}>
+            <Button data-testid='hubbutton' colorScheme="green" mr={3} value="hub" name='action3' onClick={()=>processHubPassword('enter')}>
+
               Join
             </Button>
             <Button onClick={closeSettings}>Cancel</Button>

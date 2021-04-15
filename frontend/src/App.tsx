@@ -33,11 +33,11 @@ type CoveyAppUpdate =
   | { action: 'playerDisconnect'; player: Player }
   | { action: 'weMoved'; location: UserLocation }
   | { action: 'disconnect' }
-  | { action: 'joinRequest'; data: { emitJoinRequest: (hubID: number, townIsPubliclyListed:boolean,  occupancy : number, password?: string ,) => boolean}}
+ // | { action: 'joinRequest'; data: { emitJoinRequest: (hubID: number, townIsPubliclyListed:boolean,  occupancy : number, password?: string ,) => boolean}}
   ;
 
-type CoveyHubUpdate =
-{ type: 'field'; fieldName: string; payload: string };
+/* type CoveyHubUpdate =
+{ type: 'field'; fieldName: string; payload: string }; */
 
 function defaultAppState(): CoveyAppState {
   return {
@@ -55,7 +55,7 @@ function defaultAppState(): CoveyAppState {
     },
     emitMovement: () => {
     },
-    emitJoinRequest: () => true,
+    // emitJoinRequest: () => true,
     apiClient: new TownsServiceClient(),
   };
 }
@@ -74,7 +74,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     userName: state.userName,
     socket: state.socket,
     emitMovement: state.emitMovement,
-    emitJoinRequest: state.emitJoinRequest,
+    // emitJoinRequest: state.emitJoinRequest,
     apiClient: state.apiClient,
   };
 
@@ -135,11 +135,11 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
         nextState.nearbyPlayers = state.nearbyPlayers;
       }
       break;
-    case 'joinRequest':
+    // case 'joinRequest':
 
       // nextState.emitJoinRequest= update.data.emitJoinRequest;
       
-      break;
+     // break;
     case 'playerDisconnect':
       nextState.players = nextState.players.filter((player) => player.id !== update.player.id);
 

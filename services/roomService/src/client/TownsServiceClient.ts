@@ -66,7 +66,6 @@ export interface TownListResponse {
  * Response from the server for a Hub list request
  */
 export interface HubListResponse {
-  //hubs: CoveyHubInfo[];
   isAuthenticated:boolean,
 
 }

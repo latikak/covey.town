@@ -26,7 +26,7 @@ export type CoveyAppState = {
   currentLocation: UserLocation,
   nearbyPlayers: NearbyPlayers,
   emitMovement: (location: UserLocation) => void,
-  emitJoinRequest: () =>boolean,
+  // emitJoinRequest: () =>boolean,
   socket: Socket | null,
   apiClient: TownsServiceClient,
 };
