@@ -63,6 +63,7 @@ const TownSettings: React.FunctionComponent =() => {
     const getCurrentHubId = async () =>{
       const response=await apiClient.getHubId({coveyTownID:currentTownID});
      currentHubId=response.coveyHubID;
+     console.log( currentHubId);
      return currentHubId;
     };
   }, []);

@@ -175,13 +175,16 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
   const hubs=townController.hubsList;
   const currentHub=hubs.find(eachHub=>eachHub.coveyHubID==requestData.coveyHubID);
   if(currentHub){
+    console.log("Hub Id" + currentHub);
+    console.log("Password in hub list " +currentHub.password );
+    console.log("Password from request " +requestData.coveyHubPassword);
     if(requestData.coveyHubPassword==currentHub.password)
     return {
       isOK:true,
       response:{isAuthenticated:true},
     };
     return{
-      isOK:false,
+      isOK:true,
       response:{isAuthenticated:false},
       
     }
@@ -209,11 +212,11 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
     if(townController.current_HubId!==0){
       return {
         isOK: true,
-        message: 'Current Hub Id has been updated.',
+        response:{isAuthenticated:true},
       };
     }
     return {
-      isOK: false,
+      isOK: true,
       message: 'Error: No such town exists.',
     };
    
@@ -238,8 +241,8 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
         };
       }
       return {
-        isOK: false,
-        message: 'Error: No such hub exists.',
+        isOK: true,
+        message: 'Error: No such town exists.',
       };
      
     }
@@ -264,7 +267,7 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
       };
     }
       return{
-        isOK:false,
+        isOK:true,
         response:{isAuthenticated:false},
         
       }
@@ -289,7 +292,7 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
       };
      }
      return {
-      isOK: false,
+      isOK: true,
       message: 'Error: No such password exists.',
     };
     }

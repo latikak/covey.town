@@ -189,29 +189,30 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
-  async listHubs(requestData: HubListRequest): Promise<HubListResponse> {
-    const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/hubs', requestData);
-    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
-  }
-
-  async checkPassword(requestData: HubJoinRequest): Promise<HubListResponse> {
-    const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/hubJoinRequest', requestData);
-    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
-  }
-
   async joinTown(requestData: TownJoinRequest): Promise<TownJoinResponse> {
     const responseWrapper = await this._axios.post('/sessions', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
+  async listHubs(requestData: HubListRequest): Promise<HubListResponse> {
+    const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/hubs', requestData);
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+
+  
+  async checkPassword(requestData: HubJoinRequest): Promise<HubListResponse> {
+    const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/hubJoinRequest', requestData);
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+
   
   async postHubId(requestData: CurrentHubRequest): Promise<HubListResponse> {
-    const responseWrapper = await this._axios.post('/currentHubId', requestData);
+    const responseWrapper = await this._axios.post<ResponseEnvelope<HubListResponse>>('/currentHubId', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
   async getHubId(requestData: HubListCurrentHubIdRequest): Promise<HubIdCurrentResponse> {
-    const responseWrapper = await this._axios.post('/currentHubIdRequest', requestData);
+    const responseWrapper = await this._axios.post<ResponseEnvelope<HubIdCurrentResponse>>('/currentHubIdRequest', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
   
@@ -223,6 +224,6 @@ export default class TownsServiceClient {
   async getPassword(requestData: CurrentHubRequest): Promise<CurrentHubPasswordResponse> {
     const responseWrapper = await this._axios.post('/currentPasswordRequest', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
-  }
+  } 
 
 }
