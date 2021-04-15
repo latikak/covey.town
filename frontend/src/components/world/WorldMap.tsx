@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import {   FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,Button , Input,useToast } from '@chakra-ui/react';
 import Phaser from 'phaser';
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import TownsServiceClient from '../../classes/TownsServiceClient';
+
 // Importing toastify module
     
  // toast-configuration method, 
@@ -49,12 +54,21 @@ class CoveyGameScene extends Phaser.Scene {
 
   private apiClientService:TownsServiceClient;
 
+  private setIsPrivate:React.Dispatch<React.SetStateAction<boolean>>;
 
-  constructor(video: Video, emitMovement: (loc: UserLocation) => void,apiClient:TownsServiceClient) {
+  private setCurrentHubId:React.Dispatch<React.SetStateAction<number>>;
+
+  private isAuthenticated:boolean;
+
+  constructor(video: Video, emitMovement: (loc: UserLocation) => void,apiClient:TownsServiceClient,setIsPrivate:React.Dispatch<React.SetStateAction<boolean>>,
+  setCurrentHubId:React.Dispatch<React.SetStateAction<number>>,isAuthenticated:boolean) {
     super('PlayGame');
     this.video = video;
     this.emitMovement = emitMovement;
     this.apiClientService=apiClient;
+    this.setIsPrivate=setIsPrivate;
+    this.setCurrentHubId=setCurrentHubId;
+    this.isAuthenticated=isAuthenticated;
   }
 
   preload() {
@@ -384,74 +398,29 @@ class CoveyGameScene extends Phaser.Scene {
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
 
-         
-  
-          this.add
-          .text(150, 150, `Private room. Please enter password!. Click on Town Settings button to change the password.`, {
-            font: '18px monospace',
-            color: '#000000',
-            padding: {
-              x: 20,
-              y: 10
-            },
-            backgroundColor: '#ffffff',
-          })
-          .setScrollFactor(0)
-          .setDepth(30);
-          // Post the current Hub Id
-          // console.log(this.video.coveyTownID);
-          // console.log(hubID);
-          // Posts Hub ID - no errors on this - Tahseen
-         //  const response = await this.apiClientService.postHubId({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});          
-          // console.log("Hub post" + response);
-         // const responsePassword=await this.apiClientService.getPassword({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});
-
-         // Grab Password from form and this works! - Tahseen
-           //  const responsePasswordCheck=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:"Sample"});
-           // console.log(responsePasswordCheck);
-
-          /*
-          this.add.dom(300, 300).createFromCache('passwordForm');
-          const element = this.add.dom(150, 150).createFromCache('passwordForm');
-          console.log(element)
-          element.addListener('submit');
-      
-          element.on('submit',  (event: { target: { name: string; }; }) => {
-      
-              if (event.target.name === 'submit')
-              {
-                  const inputText =  this.children.getByName('password');
-
-      
-                  //  Have they entered anything?
-                  if (inputText)
-                  {
-                        // 
-                  }
-                  else
-                  {
-                      //  Flash the prompt
-                      this.tweens.add({
-                          targets: Text,
-                          alpha: 0.2,
-                          duration: 250,
-                          ease: 'Power3',
-                          yoyo: true
-                      });
-                  }
-              }
-      
-          }); */
-  
-
-          // window.alert("Private room. Please enter password!");
+            this.setCurrentHubId(hubID);
+            this.setIsPrivate(true);
           
-          // alert("Please enter password to enter Private Hub");
-
-          return;
+         console.log(this.isAuthenticated);
+          if(this.isAuthenticated){
+        
+            const transportTargetID = transporter.getData('target') as number;
+            const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
+            if(target && target.x && target.y && this.lastLocation){
+              // Move the player to the target, update lastLocation and send it to other players
+              this.player.sprite.x = target.x;
+              this.player.sprite.y = target.y;
+              this.lastLocation.x = target.x;
+              this.lastLocation.y = target.y;
+              this.emitMovement(this.lastLocation);
+            }
+            else{
+              throw new Error(`Unable to find target object ${target}`);
+            }
+         }
         }
 
-        const transportTargetID = transporter.getData('target') as number;
+       /* const transportTargetID = transporter.getData('target') as number;
         const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
         if(target && target.x && target.y && this.lastLocation){
           // Move the player to the target, update lastLocation and send it to other players
@@ -463,7 +432,7 @@ class CoveyGameScene extends Phaser.Scene {
         }
         else{
           throw new Error(`Unable to find target object ${target}`);
-        }
+        } */
       }
     })
 
@@ -576,9 +545,14 @@ class CoveyGameScene extends Phaser.Scene {
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   const {
-    emitMovement, players, apiClient
+    emitMovement, players, apiClient,currentTownID
   } = useCoveyAppState();
+  const toast = useToast();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [currentHubId, setCurrentHubId] = useState(0);
+  const [password, setPrivatePassword] = useState('');
+  const [isAuthenticated, passwordCheckDone] = useState(false);
   useEffect(() => {
     const config = {
       type: Phaser.AUTO,
@@ -595,7 +569,7 @@ export default function WorldMap(): JSX.Element {
 
     const game = new Phaser.Game(config);
     if (video) {
-      const newGameScene = new CoveyGameScene(video, emitMovement,apiClient);
+      const newGameScene = new CoveyGameScene(video, emitMovement,apiClient,setIsPrivate,setCurrentHubId,isAuthenticated);
       setGameScene(newGameScene);
       game.scene.add('coveyBoard', newGameScene, true);
       video.pauseGame = () => {
@@ -615,7 +589,51 @@ export default function WorldMap(): JSX.Element {
     gameScene?.updatePlayersLocations(players);
   }, [players, deepPlayers, gameScene]);
 
-  return <div id="map-container"/>;
+  const authenticatePassword = async (passwordSubmit: string) =>{
+    console.log(currentTownID);
+    console.log(currentHubId);
+    console.log(passwordSubmit);
+
+    const response=await apiClient.listHubs({coveyTownID: currentTownID,coveyHubID:currentHubId,coveyHubPassword:passwordSubmit});
+    if(response.isAuthenticated){
+      passwordCheckDone(true);
+      toast({
+
+        title: 'Correct Password',
+        
+        description: 'You can now enter the hub',
+        
+        status: 'success'
+        
+        })
+    }
+    else {
+
+      toast({
+      
+      title: 'Incorrect Password',
+      
+      description: 'Please enter a correct password to access the hub.',
+      
+      status: 'error'
+      
+      });
+      
+      }
+    };
+
+
+  return (
+    
+      <div id="map-container">
+        {isPrivate && <FormControl id="email">
+        <FormLabel>password</FormLabel>
+        <Input type="password" value={password} onChange={event => setPrivatePassword(event.target.value)} />
+        <Button onClick={()=>authenticatePassword(password)}>Submit</Button>
+        <FormHelperText>Enter Password</FormHelperText>
+        </FormControl>}
+        </div>
+  );
 }
 
 
