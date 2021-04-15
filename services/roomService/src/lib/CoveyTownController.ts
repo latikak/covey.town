@@ -20,9 +20,14 @@ export default class CoveyTownController {
     return this._capacity;
   }
 
+  get isPubliclyListed(): boolean {
+    return this._isPubliclyListed;
+  }
+  
   set isPubliclyListed(value: boolean) {
     this._isPubliclyListed = value;
   }
+
   get current_HubId(): number {
     return this._current_HubId;
   }
@@ -30,17 +35,13 @@ export default class CoveyTownController {
   set current_HubId(value: number) {
     this._current_HubId = value;
   }
+  
   get current_HubId_password(): string {
     return this._current_HubId_password;
   }
 
   set current_HubId_password(value: string) {
     this._current_HubId_password = value;
-  }
-
-
-  get isPubliclyListed(): boolean {
-    return this._isPubliclyListed;
   }
 
   get townUpdatePassword(): string {
@@ -73,16 +74,17 @@ export default class CoveyTownController {
   } 
 
   get hubsList(): CoveyHubList {
-  return this._hubs
-    .map(hubController => ({
-      coveyHubID: hubController.coveyHubID,
-      friendlyName: hubController.friendlyName,
-      password: hubController.hubUpdatePassword,
-      isPubliclyListed: hubController.isPubliclyListed,
-      occupancy: hubController.occupancy,
-      capacity: hubController.capacity
-    }));
+    return this._hubs
+      .map(hubController => ({
+        coveyHubID: hubController.coveyHubID,
+        friendlyName: hubController.friendlyName,
+        password: hubController.hubUpdatePassword,
+        isPubliclyListed: hubController.isPubliclyListed,
+        occupancy: hubController.occupancy,
+        capacity: hubController.capacity,
+      }));
   }
+
   private _current_HubId: number;
 
   private _current_HubId_password:string;

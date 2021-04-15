@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Phaser, { Display } from 'phaser';
-import { Input, Box, Button, Flex, FormControl, FormLabel, Heading } from '@chakra-ui/react';
+import Phaser from 'phaser';
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
@@ -304,7 +303,7 @@ class CoveyGameScene extends Phaser.Scene {
       'right': Phaser.Input.Keyboard.KeyCodes.L
     }, false) as Phaser.Types.Input.Keyboard.CursorKeys);
 
-    function display(): JSX.Element {
+    /* function display(): JSX.Element {
       return (<Box borderWidth="1px" borderRadius="lg">
         <Heading p="4" as="h2" size="lg">Enter the password to join this hub</Heading>
         <Box borderWidth="1px" borderRadius="lg">
@@ -314,8 +313,8 @@ class CoveyGameScene extends Phaser.Scene {
           </FormControl>
           </Flex>
         </Box>
-      </Box>);
-    }
+      </Box>); 
+    } */
 
 
     // Create a sprite with physics enabled via the physics system. The image used for the sprite
@@ -408,8 +407,8 @@ class CoveyGameScene extends Phaser.Scene {
          // const responsePassword=await this.apiClientService.getPassword({coveyTownID: this.video.coveyTownID,coveyHubID:hubID});
 
          // Grab Password from form and this works! - Tahseen
-            const responsePasswordCheck=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:"Sample"});
-           console.log(responsePasswordCheck);
+           //  const responsePasswordCheck=await this.apiClientService.listHubs({coveyTownID: this.video.coveyTownID,coveyHubID:hubID,coveyHubPassword:"Sample"});
+           // console.log(responsePasswordCheck);
 
           /*
           this.add.dom(300, 300).createFromCache('passwordForm');
@@ -577,7 +576,7 @@ class CoveyGameScene extends Phaser.Scene {
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   const {
-    emitMovement, players, emitJoinRequest,apiClient
+    emitMovement, players, apiClient
   } = useCoveyAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
   useEffect(() => {
@@ -609,7 +608,7 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement]);
+  }, [video, emitMovement, apiClient]);
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {

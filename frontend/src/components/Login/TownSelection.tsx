@@ -116,14 +116,12 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         privateMessage =
           <p>This town will NOT be publicly listed. To re-enter it, you will need to use this
             ID: {newTownInfo.coveyTownID}</p>;
-      }      
+      }
       toast({
         title: `Town ${newTownName} is ready to go!`,
         description: <>{privateMessage}Please record these values in case you need to change the
           room:<br/>Town ID: {newTownInfo.coveyTownID}<br/>Town Editing
-          Password: {newTownInfo.coveyTownPassword},
-          Hubs: {newTownInfo.hubs.length},
-          </>,
+          Password: {newTownInfo.coveyTownPassword}</>,
         status: 'success',
         isClosable: true,
         duration: null,
