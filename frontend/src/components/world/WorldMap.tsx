@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {   FormControl,
   FormLabel,
-  FormErrorMessage,
   FormHelperText,Button , Input,useToast } from '@chakra-ui/react';
 import Phaser from 'phaser';
 import Player, { UserLocation } from '../../classes/Player';
@@ -317,19 +316,6 @@ class CoveyGameScene extends Phaser.Scene {
       'right': Phaser.Input.Keyboard.KeyCodes.L
     }, false) as Phaser.Types.Input.Keyboard.CursorKeys);
 
-    /* function display(): JSX.Element {
-      return (<Box borderWidth="1px" borderRadius="lg">
-        <Heading p="4" as="h2" size="lg">Enter the password to join this hub</Heading>
-        <Box borderWidth="1px" borderRadius="lg">
-          <Flex p="4"><FormControl>
-            <FormLabel htmlFor="townIDToJoin">Password</FormLabel>
-            <Input type="password" name="password" />
-          </FormControl>
-          </Flex>
-        </Box>
-      </Box>); 
-    } */
-
 
     // Create a sprite with physics enabled via the physics system. The image used for the sprite
     // has a bit of whitespace, so I'm using setSize & setOffset to control the size of the
@@ -359,41 +345,8 @@ class CoveyGameScene extends Phaser.Scene {
 
     this.physics.add.overlap(sprite, transporters,
       async (overlappingObject, transporter)=>{
-        // const hubID = transporter.getData('hubID') as number;
-        // const isPrivate = transporter.getData('type') as string;
-        // if (isPrivate === 'private'){
-          // this.hubInfo.friendlyName='Sample';
-          // this.hubInfo.isPubliclyListed=true;
-          // const response=await this.apiClientService.createTown(this.hubInfo);
-          // console.log(response);
-          
-        // } 
-        // const publicMaxOccupancy = 1;
-        // let privateMaxOccupancy = 1;
-
-        // In the tiled editor, set the 'target' to be an *object* pointer
-        // Here, we'll see just the ID, then find the object by ID
-        /* const objID = transporter.getData('target') as number;
-        const hubID = transporter.getData('hubID') as number;
-        if (this.currentHospitalOccupants  >= publicMaxOccupancy){
-          window.alert(`Hospital has reached Maximum Capacity${  objID}`);
-          return;
-        }
-        if( objID === 305 && (this.currentHospitalOccupants  < publicMaxOccupancy)) {
-          this.currentHospitalOccupants += 1;
-          window.alert(`Hospital has Id 305 occupancy is ${this.currentHospitalOccupants}`);
-        }
-                        /* <Button data-testid='joinTownByIDButton'
-        onChange={() => handleJoin(transporter)}>Join</Button> */
-        
-        /*
-        else if (objID === 308) {
-          this.currentHospitalOccupants -= 1;
-        } */
 
         if(cursorKeys.space.isDown && this.player){
-        
-
 
         const hubID = transporter.getData('hubID') as number;
         if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
@@ -401,9 +354,10 @@ class CoveyGameScene extends Phaser.Scene {
             this.setCurrentHubId(hubID);
             this.setIsPrivate(true);
           
-         console.log(this.isAuthenticated);
           if(this.isAuthenticated){
-        
+
+            if(cursorKeys.space.isDown && this.player){
+
             const transportTargetID = transporter.getData('target') as number;
             const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
             if(target && target.x && target.y && this.lastLocation){
@@ -417,10 +371,12 @@ class CoveyGameScene extends Phaser.Scene {
             else{
               throw new Error(`Unable to find target object ${target}`);
             }
+          }  
          }
+         return;
         }
-
-       /* const transportTargetID = transporter.getData('target') as number;
+    if (hubID === 4 || hubID === 7 ){
+       const transportTargetID = transporter.getData('target') as number;
         const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
         if(target && target.x && target.y && this.lastLocation){
           // Move the player to the target, update lastLocation and send it to other players
@@ -432,8 +388,9 @@ class CoveyGameScene extends Phaser.Scene {
         }
         else{
           throw new Error(`Unable to find target object ${target}`);
-        } */
+        }
       }
+    }
     })
 
     this.emitMovement({
@@ -582,7 +539,7 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, apiClient]);
+  }, [video, emitMovement, apiClient, isAuthenticated]);
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {
@@ -590,9 +547,6 @@ export default function WorldMap(): JSX.Element {
   }, [players, deepPlayers, gameScene]);
 
   const authenticatePassword = async (passwordSubmit: string) =>{
-    console.log(currentTownID);
-    console.log(currentHubId);
-    console.log(passwordSubmit);
 
     const response=await apiClient.listHubs({coveyTownID: currentTownID,coveyHubID:currentHubId,coveyHubPassword:passwordSubmit});
     if(response.isAuthenticated){

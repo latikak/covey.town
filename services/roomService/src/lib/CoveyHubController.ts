@@ -88,7 +88,7 @@ export default class CoveyHubController {
     this._coveyHubID = coveyHubID;
     this._coveyTownID = coveyTownID;
     this._capacity = 1;
-    this._hubUpdatePassword = nanoid(24);
+    this._hubUpdatePassword = friendlyName;
     this._isPubliclyListed = isPubliclyListed;
     this._friendlyName = friendlyName;
     this._occupancy = 0;
