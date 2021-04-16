@@ -785,8 +785,8 @@ export default function WorldMap(): JSX.Element {
   <Tbody>
   {currentHubs?.hubs.map((hub) => (
                    <Tr key={hub.coveyHubID}>
-                   <Td>
                    
+                   <Td>
                    {hub.friendlyName}
                    </Td>
                     <Td>
