@@ -380,7 +380,7 @@ class CoveyGameScene extends Phaser.Scene {
               this.lastLocation.x = target.x;
               this.lastLocation.y = target.y;
               this.emitMovement(this.lastLocation);
-              this.isAuthenticated = false;
+              
             }
             else{
               throw new Error(`Unable to find target object ${target}`);
@@ -414,7 +414,7 @@ class CoveyGameScene extends Phaser.Scene {
               throw new Error(`Unable to find target object ${target}`);
             }
           }  
-          this.isAuthenticated = false;
+          
          }
          return;
         }
@@ -442,7 +442,7 @@ class CoveyGameScene extends Phaser.Scene {
               throw new Error(`Unable to find target object ${target}`);
             }
           }  
-          this.isAuthenticated = false;
+         
          }
          return;
         }
@@ -470,7 +470,7 @@ class CoveyGameScene extends Phaser.Scene {
               throw new Error(`Unable to find target object ${target}`);
             }
           }  
-          this.isAuthenticated = false;
+        
          }
          return;
         }
@@ -498,7 +498,7 @@ class CoveyGameScene extends Phaser.Scene {
               throw new Error(`Unable to find target object ${target}`);
             }
           }  
-          this.isAuthenticated = false;
+          
          }
          return;
         }
@@ -687,7 +687,7 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, apiClient, passwordCheckDone]);
+  }, [video, emitMovement, apiClient, passwordCheckDone, isAuthenticated]);
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {
