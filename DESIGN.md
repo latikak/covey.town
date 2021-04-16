@@ -32,9 +32,13 @@ A new custom property, hubID, was also added to transporter objects to support t
 **Back End:**
 
 CoveyHubStore tracks all of the hubs
+
 CoveyHubController implements the logic for each hub: managing events that can occur (eg. Creating a Hub)
+
 CoveyTownController uses instance of CoveyHubStore to create Hubs for each town
+
 TownServiceClient has been modified to incorporate hub info in TownCreateResponse, Request and Response for Password Authentication on Private Hubs
+
 CoveyTownRequestHandler has been modified to perform Password Authentication request
 
 towns - new routes have been added to get and post Hub Info
