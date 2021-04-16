@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useCallback} from 'react';
 import {   FormControl,
   FormLabel,
   FormHelperText,Button , Input,useToast, useDisclosure,Modal,
@@ -7,12 +7,16 @@ import {   FormControl,
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton, } from '@chakra-ui/react';
+  ModalCloseButton,
+  List, ListItem, ListIcon, OrderedList, UnorderedList } from '@chakra-ui/react';
+  import {FaRegBuilding } from "react-icons/fa";
+  import {RiLockPasswordLine,RiBuilding2Line } from "react-icons/ri";
+  import { SiBandsintown } from "react-icons/si";
 import Phaser from 'phaser';
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
-import TownsServiceClient from '../../classes/TownsServiceClient';
+import TownsServiceClient, { TownsList } from '../../classes/TownsServiceClient';
 
 // Importing toastify module
     
@@ -508,7 +512,7 @@ class CoveyGameScene extends Phaser.Scene {
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   const {
-    emitMovement, players, apiClient,currentTownID
+    emitMovement, players, apiClient,currentTownID,currentTownFriendlyName
   } = useCoveyAppState();
   const toast = useToast();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
@@ -516,7 +520,25 @@ export default function WorldMap(): JSX.Element {
   const [currentHubId, setCurrentHubId] = useState(0);
   const [password, setPrivatePassword] = useState('');
   const [isAuthenticated, passwordCheckDone] = useState(false);
+  const [displayNewTownInfo, setNewTownCreated] = useState<boolean>(false);
+  const [currentHubs, setCurrentHubsInTown] = useState<TownsList>();
   
+  const updateHubListings = useCallback(async () => {
+   const getAllHubs = await apiClient.listAllHubsInTown({coveyTownID:currentTownID});
+     if(getAllHubs.hubs.length>0){
+      setNewTownCreated(true);
+      setCurrentHubsInTown({
+        coveyTownID:getAllHubs.coveyTownID,
+        coveyTownPassword: getAllHubs.coveyTownPassword,
+        hubs:getAllHubs.hubs
+      });
+     }
+  }, [setCurrentHubsInTown, apiClient]);
+
+  useEffect(() => {
+    updateHubListings();
+  }, [updateHubListings]);
+
   useEffect(() => {
     const config = {
       type: Phaser.AUTO,
@@ -558,6 +580,7 @@ export default function WorldMap(): JSX.Element {
     const response=await apiClient.listHubs({coveyTownID: currentTownID,coveyHubID:currentHubId,coveyHubPassword:passwordSubmit});
     if(response.isAuthenticated){
       passwordCheckDone(true);
+
       toast({
 
         title: 'Correct Password',
@@ -587,6 +610,48 @@ export default function WorldMap(): JSX.Element {
   return (
     
       <div id="map-container">
+        <Modal isOpen={displayNewTownInfo} onClose={()=>setNewTownCreated(!displayNewTownInfo)}>
+  <ModalOverlay />
+  <ModalContent>
+    <ModalHeader>The details of Town created are:</ModalHeader>
+    <ModalCloseButton />
+    <ModalBody>
+    <List spacing={3}>
+  <ListItem>
+    <ListIcon as={SiBandsintown} color="green.500" />
+     {currentHubs?.coveyTownID} : {currentTownFriendlyName}
+  </ListItem>
+  <ListItem>
+    <ListIcon as={RiLockPasswordLine} color="green.500" />
+    {currentHubs?.coveyTownPassword}
+  </ListItem>
+  <ListItem>
+    <ListIcon as={FaRegBuilding} color="green.500" />
+      The hubs are :
+      <ListItem>
+      {currentHubs?.hubs.map((hub) => (
+                   <ListItem key={hub.coveyHubID}>
+                   <ListIcon as={RiBuilding2Line} color="green.500" />
+                   {hub.coveyHubID} : {hub.friendlyName}
+                   <ListIcon as={RiLockPasswordLine} color="green.500" />
+                   {console.log(hub.coveyHubPassword)}
+                   {hub.coveyHubPassword}
+                 </ListItem>
+                 
+                  ))}
+      </ListItem>
+  </ListItem>
+  
+</List>
+    </ModalBody>
+
+    <ModalFooter>
+      <Button colorScheme="blue" mr={3} onClick={()=>setNewTownCreated(!displayNewTownInfo)}>
+        OK , Noted !
+      </Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
 
 <Modal isOpen={isPrivate} onClose={()=>setIsPrivate(!isPrivate)}>
   <ModalOverlay />

@@ -137,6 +137,22 @@ export interface ResponseEnvelope<T> {
   response?: T;
 }
 
+
+export type Hub= {
+  coveyHubID: number;
+  friendlyName: string;
+  password: string;
+  isPubliclyListed: boolean;
+  occupancy: number;
+  capacity: number;
+}
+
+export type TownsList= {
+  coveyTownID: string;
+  coveyTownPassword: string;
+  hubs: CoveyHubInfo[];
+}
+
 export type CoveyTownInfo = {
   friendlyName: string;
   coveyTownID: string;
@@ -186,6 +202,11 @@ export default class TownsServiceClient {
 
   async listTowns(): Promise<TownListResponse> {
     const responseWrapper = await this._axios.get<ResponseEnvelope<TownListResponse>>('/towns');
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper);
+  }
+
+  async listAllHubsInTown(requestData: HubListCurrentHubIdRequest): Promise<TownCreateResponse> {
+    const responseWrapper = await this._axios.get<ResponseEnvelope<TownCreateResponse>>(`/towns/${requestData.coveyTownID}`);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
