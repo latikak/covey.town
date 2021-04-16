@@ -1,14 +1,14 @@
 import React, { useEffect, useState ,useCallback} from 'react';
-import {   FormControl,
+import {
   FormLabel,
-  FormHelperText,Button , Input,useToast, useDisclosure,Modal,
+  Button, Input,useToast, Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  List, ListItem, ListIcon, OrderedList, UnorderedList } from '@chakra-ui/react';
+  List, ListItem, ListIcon } from '@chakra-ui/react';
   import {FaRegBuilding } from "react-icons/fa";
   import {RiLockPasswordLine,RiBuilding2Line } from "react-icons/ri";
   import { SiBandsintown } from "react-icons/si";
@@ -364,9 +364,6 @@ class CoveyGameScene extends Phaser.Scene {
         
         if (objID === 326){
 
-          console.log(hubID);
-          console.log(objID);
-
             this.setCurrentHubId(hubID);
             this.setIsPrivate(true);
           
@@ -395,8 +392,6 @@ class CoveyGameScene extends Phaser.Scene {
          return;
         }
         if (objID === 338){
-          console.log(hubID);
-          console.log(objID);
 
             this.setCurrentHubId(hubID);
             this.setIsPrivate(true);
@@ -425,8 +420,6 @@ class CoveyGameScene extends Phaser.Scene {
          return;
         }
         if (objID === 341){
-          console.log(hubID);
-          console.log(objID);
 
             this.setCurrentHubId(hubID);
             this.setIsPrivate(true);
@@ -455,8 +448,6 @@ class CoveyGameScene extends Phaser.Scene {
          return;
         }
         if (objID === 314){
-          console.log(hubID);
-          console.log(objID);
 
             this.setCurrentHubId(hubID);
             this.setIsPrivate(true);
@@ -485,8 +476,6 @@ class CoveyGameScene extends Phaser.Scene {
          return;
         }
         if (objID === 315){
-          console.log(hubID);
-          console.log(objID);
 
             this.setCurrentHubId(hubID);
             this.setIsPrivate(true);
@@ -664,7 +653,7 @@ export default function WorldMap(): JSX.Element {
         hubs:getAllHubs.hubs
       });
      }
-  }, [setCurrentHubsInTown, apiClient]);
+  }, [apiClient, currentTownID]);
 
   useEffect(() => {
     updateHubListings();
@@ -765,7 +754,6 @@ export default function WorldMap(): JSX.Element {
                    <ListIcon as={RiBuilding2Line} color="green.500" />
                    {hub.coveyHubID} : {hub.friendlyName}
                    <ListIcon as={RiLockPasswordLine} color="green.500" />
-                   {console.log(hub.coveyHubPassword)}
                    {hub.coveyHubPassword}
                  </ListItem>
                  

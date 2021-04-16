@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import { UserLocation } from '../CoveyTypes';
 import CoveyHubListener from '../types/CoveyHubListener';
 import Player from '../types/Player';
