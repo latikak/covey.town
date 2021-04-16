@@ -8,7 +8,13 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  List, ListItem, ListIcon } from '@chakra-ui/react';
+  List, ListItem, ListIcon ,  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+ } from '@chakra-ui/react';
   import {FaRegBuilding } from "react-icons/fa";
   import {RiLockPasswordLine,RiBuilding2Line } from "react-icons/ri";
   import { SiBandsintown } from "react-icons/si";
@@ -51,13 +57,6 @@ class CoveyGameScene extends Phaser.Scene {
   private paused = false;
 
   private video: Video;
-
-  // private hubInfo:{
-    // friendlyName: string,
-    // isPubliclyListed: boolean
-  // };
-
-
 
   private emitMovement: (loc: UserLocation) => void;
 
@@ -688,7 +687,7 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, apiClient, isAuthenticated]);
+  }, [video, emitMovement, apiClient, passwordCheckDone]);
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {
@@ -738,27 +737,71 @@ export default function WorldMap(): JSX.Element {
     <ModalBody>
     <List spacing={3}>
   <ListItem>
-    <ListIcon as={SiBandsintown} color="green.500" />
-     {currentHubs?.coveyTownID} : {currentTownFriendlyName}
+    <Table>
+    <Thead>
+    <Tr>
+      <Th><ListIcon as={SiBandsintown} color="green.500" /> Town Id</Th>
+      <Th><ListIcon as={SiBandsintown} color="green.500" /> Town Name</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+  <Tr>
+    <Td>
+    {currentHubs?.coveyTownID} 
+    </Td>
+    <Td>
+    {currentTownFriendlyName}
+    </Td>
+  </Tr>
+    </Tbody>
+    </Table>
   </ListItem>
   <ListItem>
-    <ListIcon as={RiLockPasswordLine} color="green.500" />
+  <Table>
+    <Thead>
+    <Tr>
+      <Th><ListIcon as={RiLockPasswordLine} color="green.500" />Town Password</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+  <Tr>
+    <Td>
     {currentHubs?.coveyTownPassword}
+    </Td>
+  </Tr>
+    </Tbody>
+    </Table>
   </ListItem>
   <ListItem>
     <ListIcon as={FaRegBuilding} color="green.500" />
       The hubs are :
-      <ListItem>
-      {currentHubs?.hubs.map((hub) => (
-                   <ListItem key={hub.coveyHubID}>
-                   <ListIcon as={RiBuilding2Line} color="green.500" />
-                   {hub.coveyHubID} : {hub.friendlyName}
-                   <ListIcon as={RiLockPasswordLine} color="green.500" />
+      <Table variant="simple">
+  <Thead>
+    <Tr>
+      <Th><ListIcon as={RiBuilding2Line} color="green.500" />Hub Id</Th>
+      <Th><ListIcon as={RiBuilding2Line} color="green.500" />Hub Name</Th>
+      <Th><ListIcon as={RiLockPasswordLine} color="green.500" />Hub Password</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+  {currentHubs?.hubs.map((hub) => (
+                   <Tr key={hub.coveyHubID}>
+                     <Td>
+                   {hub.coveyHubID}</Td>
+                   <Td>
+                   
+                   {hub.friendlyName}
+                   </Td>
+                    <Td>
+                    
                    {hub.coveyHubPassword}
-                 </ListItem>
+                    </Td>
+                  
+                 </Tr>
                  
                   ))}
-      </ListItem>
+    </Tbody>
+</Table>
   </ListItem>
   
 </List>
@@ -775,7 +818,7 @@ export default function WorldMap(): JSX.Element {
 <Modal isOpen={isPrivate} onClose={()=>setIsPrivate(!isPrivate)}>
   <ModalOverlay />
   <ModalContent>
-    <ModalHeader>Please enter password for this Hub:</ModalHeader>
+    <ModalHeader>Please enter password for this private Hub:</ModalHeader>
     <ModalCloseButton />
     <ModalBody>
     <FormLabel>Password</FormLabel>
