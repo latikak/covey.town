@@ -1,3 +1,24 @@
+The link to our code: https://github.com/latikak/covey.town
+
+
+Deploy the backend rooms service to Heroku.
+This way, you can have a publicly available version of our backend service, which will automatically update with any changes that you push to Git. 
+
+1. Go to Heroku.com and create an account, or sign in if you already have one
+
+2. After signing in, create a new app. Choose a name for your app that is somewhat descriptive - it will become part of the URL that you’ll use to access the service. Click “Create app” (no need to go through “Add to pipeline…”)
+
+3. After creating your app on Heroku, open the app’s settings page, revealing a page that looks like this: 
+![image](https://user-images.githubusercontent.com/41226737/114953674-ddad4c80-9e26-11eb-91cc-e377e5698ba3.png)
+
+4. Click “Reveal Config Vars”, and enter the 4 twilio configuration variables from your .env file. Heroku’s “Config Vars” are the way that we tell Heroku what variables to use for .env without having to commit that file into the (publicly viewable) repository. Your configuration settings on Heroku should look like this now: 
+![image](https://user-images.githubusercontent.com/41226737/114953711-f453a380-9e26-11eb-9a64-43577c815015.png)
+
+Before navigating away from this settings page, scroll down to “Domains”, and take note of the address that Heroku has provided for your app. This should say something like “Your app can be found at https://covey-deployment-example.herokuapp.com/”.
+
+To confirm that your service is successfully deployed, try to visit it in your browser. Use the URL that you noted in step 5 (“Your app can be found at https://covey-deployment-example.herokuapp.com/”). Append towns to the URl, and visit it in your browser (e.g. https://covey-deployment-example.herokuapp.com/towns). After a short delay, you should see the response {"isOK":true,"response":{"towns":[]}}.
+
+
 Deploy our frontend to Netlify. Netlify will create an optimized production build of your frontend (by running npm run build) and host it in their globally-distributed content delivery network.
 
 Create a free account on Netlify. We suggest signing up with GitHub.
