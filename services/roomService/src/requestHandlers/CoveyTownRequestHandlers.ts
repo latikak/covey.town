@@ -178,7 +178,7 @@ export async function hubRequestHandler(requestData: HubListRequest): Promise<Re
     // console.log("Hub Id" + currentHub);
     // console.log("Password in hub list " +currentHub.password );
     // console.log("Password from request " +requestData.coveyHubPassword);
-    if (requestData.coveyHubPassword===currentHub.password)
+    if (requestData.coveyHubPassword===currentHub.coveyHubPassword)
       return {
         isOK:true,
         response:{isAuthenticated:true},
@@ -315,6 +315,25 @@ export async function townCreateHandler(requestData: TownCreateRequest): Promise
       coveyTownID: newTown.coveyTownID,
       coveyTownPassword: newTown.townUpdatePassword,
       hubs: newTown.getHubs(),
+    },
+  };
+}
+
+export async function listAllHubsInTownRequestHandler(requestData: HubListCurrentHubIdRequest): Promise<ResponseEnvelope<TownCreateResponse>> {
+  const townsStore = CoveyTownsStore.getInstance();
+  const townController=townsStore.getControllerForTown(requestData.coveyTownID);
+  if (!townController) {
+    return {
+      isOK: false,
+      message: 'Error: No such town exists.',
+    };
+  }
+  return {
+    isOK: true,
+    response: {
+      coveyTownID: requestData.coveyTownID,
+      coveyTownPassword: townController.townUpdatePassword,
+      hubs: townController.getHubs(),
     },
   };
 }

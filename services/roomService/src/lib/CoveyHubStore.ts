@@ -32,7 +32,7 @@ export default class CoveyHubStore {
       .map(hubController => ({
         coveyHubID: hubController.coveyHubID,
         friendlyName: hubController.friendlyName,
-        password: hubController.hubUpdatePassword,
+        coveyHubPassword: hubController.hubUpdatePassword,
         isPubliclyListed:hubController.isPubliclyListed,
         capacity: hubController.capacity,
         occupancy:hubController.occupancy,
