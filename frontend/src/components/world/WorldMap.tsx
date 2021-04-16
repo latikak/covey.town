@@ -359,12 +359,50 @@ class CoveyGameScene extends Phaser.Scene {
         if(cursorKeys.space.isDown && this.player){
 
         const hubID = transporter.getData('hubID') as number;
-        if (hubID === 1 || hubID === 3 || hubID === 2 || hubID === 6 || hubID === 5){
+        const objID = transporter.getData('target') as number;
+
+        
+        if (objID === 326){
+
+          console.log(hubID);
+          console.log(objID);
 
             this.setCurrentHubId(hubID);
             this.setIsPrivate(true);
           
           if(this.isAuthenticated){
+            this.setIsPrivate(false);
+
+            if(cursorKeys.space.isDown && this.player){
+
+            const transportTargetID = transporter.getData('target') as number;
+            const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
+            if(target && target.x && target.y && this.lastLocation){
+              // Move the player to the target, update lastLocation and send it to other players
+              this.player.sprite.x = target.x;
+              this.player.sprite.y = target.y;
+              this.lastLocation.x = target.x;
+              this.lastLocation.y = target.y;
+              this.emitMovement(this.lastLocation);
+              this.isAuthenticated = false;
+            }
+            else{
+              throw new Error(`Unable to find target object ${target}`);
+            }
+          }  
+          
+         }
+         return;
+        }
+        if (objID === 338){
+          console.log(hubID);
+          console.log(objID);
+
+            this.setCurrentHubId(hubID);
+            this.setIsPrivate(true);
+          
+          if(this.isAuthenticated){
+            this.setIsPrivate(false);
 
             if(cursorKeys.space.isDown && this.player){
 
@@ -382,10 +420,103 @@ class CoveyGameScene extends Phaser.Scene {
               throw new Error(`Unable to find target object ${target}`);
             }
           }  
+          this.isAuthenticated = false;
          }
          return;
         }
-    if (hubID === 4 || hubID === 7 ){
+        if (objID === 341){
+          console.log(hubID);
+          console.log(objID);
+
+            this.setCurrentHubId(hubID);
+            this.setIsPrivate(true);
+          
+          if(this.isAuthenticated){
+            this.setIsPrivate(false);
+
+            if(cursorKeys.space.isDown && this.player){
+
+            const transportTargetID = transporter.getData('target') as number;
+            const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
+            if(target && target.x && target.y && this.lastLocation){
+              // Move the player to the target, update lastLocation and send it to other players
+              this.player.sprite.x = target.x;
+              this.player.sprite.y = target.y;
+              this.lastLocation.x = target.x;
+              this.lastLocation.y = target.y;
+              this.emitMovement(this.lastLocation);
+            }
+            else{
+              throw new Error(`Unable to find target object ${target}`);
+            }
+          }  
+          this.isAuthenticated = false;
+         }
+         return;
+        }
+        if (objID === 314){
+          console.log(hubID);
+          console.log(objID);
+
+            this.setCurrentHubId(hubID);
+            this.setIsPrivate(true);
+          
+          if(this.isAuthenticated){
+            this.setIsPrivate(false);
+
+            if(cursorKeys.space.isDown && this.player){
+
+            const transportTargetID = transporter.getData('target') as number;
+            const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
+            if(target && target.x && target.y && this.lastLocation){
+              // Move the player to the target, update lastLocation and send it to other players
+              this.player.sprite.x = target.x;
+              this.player.sprite.y = target.y;
+              this.lastLocation.x = target.x;
+              this.lastLocation.y = target.y;
+              this.emitMovement(this.lastLocation);
+            }
+            else{
+              throw new Error(`Unable to find target object ${target}`);
+            }
+          }  
+          this.isAuthenticated = false;
+         }
+         return;
+        }
+        if (objID === 315){
+          console.log(hubID);
+          console.log(objID);
+
+            this.setCurrentHubId(hubID);
+            this.setIsPrivate(true);
+          
+          if(this.isAuthenticated){
+            this.setIsPrivate(false);
+
+            if(cursorKeys.space.isDown && this.player){
+
+            const transportTargetID = transporter.getData('target') as number;
+            const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
+            if(target && target.x && target.y && this.lastLocation){
+              // Move the player to the target, update lastLocation and send it to other players
+              this.player.sprite.x = target.x;
+              this.player.sprite.y = target.y;
+              this.lastLocation.x = target.x;
+              this.lastLocation.y = target.y;
+              this.emitMovement(this.lastLocation);
+            }
+            else{
+              throw new Error(`Unable to find target object ${target}`);
+            }
+          }  
+          this.isAuthenticated = false;
+         }
+         return;
+        }
+        
+    if (hubID === 4 || hubID === 7 || objID === 324 || objID === 350 || objID === 352 
+      || objID === 322 || objID === 319){
        const transportTargetID = transporter.getData('target') as number;
         const target = map.findObject('Objects', obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id === transportTargetID);
         if(target && target.x && target.y && this.lastLocation){
@@ -575,12 +706,12 @@ export default function WorldMap(): JSX.Element {
     gameScene?.updatePlayersLocations(players);
   }, [players, deepPlayers, gameScene]);
 
-  const authenticatePassword = async (passwordSubmit: string) =>{
+  const authenticatePassword = async (passwordSubmit: string  ) =>{
 
     const response=await apiClient.listHubs({coveyTownID: currentTownID,coveyHubID:currentHubId,coveyHubPassword:passwordSubmit});
     if(response.isAuthenticated){
       passwordCheckDone(true);
-
+      setIsPrivate(false);
       toast({
 
         title: 'Correct Password',
@@ -660,11 +791,11 @@ export default function WorldMap(): JSX.Element {
     <ModalCloseButton />
     <ModalBody>
     <FormLabel>password</FormLabel>
-        <Input type="password" value={password} onChange={event => setPrivatePassword(event.target.value)} />
+        <Input type="password" onChange={event => setPrivatePassword(event.target.value)} />
     </ModalBody>
 
     <ModalFooter>
-      <Button colorScheme="blue" mr={3}  onClick={()=>authenticatePassword(password)}>
+      <Button colorScheme="blue" mr={3}  onClick={(ev)=>{ev.preventDefault();authenticatePassword(password)}} >
         Submit
       </Button>
     </ModalFooter>

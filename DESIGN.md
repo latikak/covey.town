@@ -14,10 +14,13 @@ Five internal layouts for houses (private hubs): three small houses, and two lar
 
 A new custom property, hubID, was also added to transporter objects to support the implementation of the public and private hubs feature.
 
-
-
-![image](https://user-images.githubusercontent.com/41226737/114893811-1247e680-9ddc-11eb-9cb6-83b4dc69af42.png)
-
+Use case Diagram:
 
 ![image](https://user-images.githubusercontent.com/41226737/114894479-aa45d000-9ddc-11eb-92c6-787a716225a5.png)
+
+
+Sequence Diagram:
+
+![image](https://user-images.githubusercontent.com/41226737/114958734-a3957800-9e31-11eb-818e-2bb76644ab35.png)
+
 
