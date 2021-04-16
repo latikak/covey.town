@@ -778,7 +778,6 @@ export default function WorldMap(): JSX.Element {
       <Table variant="simple">
   <Thead>
     <Tr>
-      <Th><ListIcon as={RiBuilding2Line} color="green.500" />Hub Id</Th>
       <Th><ListIcon as={RiBuilding2Line} color="green.500" />Hub Name</Th>
       <Th><ListIcon as={RiLockPasswordLine} color="green.500" />Hub Password</Th>
     </Tr>
@@ -786,8 +785,6 @@ export default function WorldMap(): JSX.Element {
   <Tbody>
   {currentHubs?.hubs.map((hub) => (
                    <Tr key={hub.coveyHubID}>
-                     <Td>
-                   {hub.coveyHubID}</Td>
                    <Td>
                    
                    {hub.friendlyName}
