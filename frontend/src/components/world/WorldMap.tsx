@@ -778,7 +778,7 @@ export default function WorldMap(): JSX.Element {
     <ModalHeader>Please enter password for this Hub:</ModalHeader>
     <ModalCloseButton />
     <ModalBody>
-    <FormLabel>password</FormLabel>
+    <FormLabel>Password</FormLabel>
         <Input type="password" onChange={event => setPrivatePassword(event.target.value)} />
     </ModalBody>
 
