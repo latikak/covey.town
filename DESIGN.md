@@ -37,7 +37,7 @@ CoveyHubController implements the logic for each hub: managing events that can o
 
 CoveyTownController uses instance of CoveyHubStore to create Hubs for each town
 
-TownServiceClient has been modified to incorporate hub info in TownCreateResponse, Request and Response for Password Authentication on Private Hubs
+TownServiceClient has been modified to incorporate hub info in TownCreateResponse, Request and Response for Password Authentication on Private Hubs has been added
 
 CoveyTownRequestHandler has been modified to perform Password Authentication request
 
