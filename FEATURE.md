@@ -45,7 +45,7 @@ Ensure the Covey.Town user is able to
 1. Use arrow keys to navigate through the main door to enter
 2. Enter the password for the private Hub
 3. Not allowed to enter the Hub if the password is incorrect
-4. Successfully enter and view Hub capacity increased by one
+4. Successfully enter the Hub
 5. View a distinct interior map layout of the Hub, other users(avatars) and explore using arrow keys
 6. Use arrow keys to navigate to the main door
 7. Exit Hub
