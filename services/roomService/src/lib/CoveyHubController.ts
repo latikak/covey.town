@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { UserLocation } from '../CoveyTypes';
 import CoveyHubListener from '../types/CoveyHubListener';
 import Player from '../types/Player';
@@ -87,7 +88,7 @@ export default class CoveyHubController {
     this._coveyHubID = coveyHubID;
     this._coveyTownID = coveyTownID;
     this._capacity = 1;
-    this._hubUpdatePassword = friendlyName;
+    this._hubUpdatePassword = nanoid();
     this._isPubliclyListed = isPubliclyListed;
     this._friendlyName = friendlyName;
     this._occupancy = 0;
