@@ -8,7 +8,14 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  List, ListItem, ListIcon } from '@chakra-ui/react';
+  List, ListItem, ListIcon ,  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption} from '@chakra-ui/react';
   import {FaRegBuilding } from "react-icons/fa";
   import {RiLockPasswordLine,RiBuilding2Line } from "react-icons/ri";
   import { SiBandsintown } from "react-icons/si";
@@ -738,27 +745,71 @@ export default function WorldMap(): JSX.Element {
     <ModalBody>
     <List spacing={3}>
   <ListItem>
-    <ListIcon as={SiBandsintown} color="green.500" />
-     {currentHubs?.coveyTownID} : {currentTownFriendlyName}
+    <Table>
+    <Thead>
+    <Tr>
+      <Th><ListIcon as={SiBandsintown} color="green.500" /> Town Id</Th>
+      <Th><ListIcon as={SiBandsintown} color="green.500" /> Town Name</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+  <Tr>
+    <Td>
+    {currentHubs?.coveyTownID} 
+    </Td>
+    <Td>
+    {currentTownFriendlyName}
+    </Td>
+  </Tr>
+    </Tbody>
+    </Table>
   </ListItem>
   <ListItem>
-    <ListIcon as={RiLockPasswordLine} color="green.500" />
+  <Table>
+    <Thead>
+    <Tr>
+      <Th><ListIcon as={RiLockPasswordLine} color="green.500" />Town Password</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+  <Tr>
+    <Td>
     {currentHubs?.coveyTownPassword}
+    </Td>
+  </Tr>
+    </Tbody>
+    </Table>
   </ListItem>
   <ListItem>
     <ListIcon as={FaRegBuilding} color="green.500" />
       The hubs are :
-      <ListItem>
-      {currentHubs?.hubs.map((hub) => (
-                   <ListItem key={hub.coveyHubID}>
-                   <ListIcon as={RiBuilding2Line} color="green.500" />
-                   {hub.coveyHubID} : {hub.friendlyName}
-                   <ListIcon as={RiLockPasswordLine} color="green.500" />
+      <Table variant="simple">
+  <Thead>
+    <Tr>
+      <Th><ListIcon as={RiBuilding2Line} color="green.500" />Hub Id</Th>
+      <Th><ListIcon as={RiBuilding2Line} color="green.500" />Hub Name</Th>
+      <Th><ListIcon as={RiLockPasswordLine} color="green.500" />Hub Password</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+  {currentHubs?.hubs.map((hub) => (
+                   <Tr key={hub.coveyHubID}>
+                     <Td>
+                   {hub.coveyHubID}</Td>
+                   <Td>
+                   
+                   {hub.friendlyName}
+                   </Td>
+                    <Td>
+                    
                    {hub.coveyHubPassword}
-                 </ListItem>
+                    </Td>
+                  
+                 </Tr>
                  
                   ))}
-      </ListItem>
+    </Tbody>
+</Table>
   </ListItem>
   
 </List>
