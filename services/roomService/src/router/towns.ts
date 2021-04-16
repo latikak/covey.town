@@ -14,7 +14,7 @@ import {
   hubCurretIdGetRequestHandler,
   hubPasswordStoreRequestHandler,
   hubPasswordRequestHandler, 
-  listAllHubsInTownRequestHandler
+  listAllHubsInTownRequestHandler,
 } from '../requestHandlers/CoveyTownRequestHandlers';
 import { logError } from '../Utils';
 
@@ -227,24 +227,27 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
         });
     }
   });
-   /**
+
+  /**
    * Get all hubs in a town.
    */
-    app.get('/towns/:townId', BodyParser.json(), async (req, res) => {
-      try {
-        const result = await listAllHubsInTownRequestHandler({
-          coveyTownID:req.params.townId
+  
+  app.get('/towns/:townId', BodyParser.json(), async (req, res) => {
+    try {
+      const result = await listAllHubsInTownRequestHandler({
+        coveyTownID:req.params.townId,
+      });
+      res.status(StatusCodes.OK)
+        .json(result);
+    } catch (err) {
+      logError(err);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({
+          message: 'Internal server error, please see log in server for more details',
         });
-        res.status(StatusCodes.OK)
-          .json(result);
-      } catch (err) {
-        logError(err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({
-            message: 'Internal server error, please see log in server for more details',
-          });
-      }
-    });
+    }
+  });
+
   /**
    * Update a town
    */
