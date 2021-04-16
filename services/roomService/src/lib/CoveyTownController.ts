@@ -78,7 +78,7 @@ export default class CoveyTownController {
       .map(hubController => ({
         coveyHubID: hubController.coveyHubID,
         friendlyName: hubController.friendlyName,
-        coveyHubPassword: hubController.hubUpdatePassword,
+        coveyHubPassword: nanoid(),
         isPubliclyListed: hubController.isPubliclyListed,
         occupancy: hubController.occupancy,
         capacity: hubController.capacity,
