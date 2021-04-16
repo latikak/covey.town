@@ -29,6 +29,16 @@ Five internal layouts for houses (private hubs): three small houses, and two lar
 
 A new custom property, hubID, was also added to transporter objects to support the implementation of the public and private hubs feature.
 
+**Back End:**
+
+CoveyHubStore tracks all of the hubs
+CoveyHubController implements the logic for each hub: managing events that can occur (eg. Creating a Hub)
+CoveyTownController uses instance of CoveyHubStore to create Hubs for each town
+TownServiceClient has been modified to incorporate hub info in TownCreateResponse, Request and Response for Password Authentication on Private Hubs
+CoveyTownRequestHandler has been modified to perform Password Authentication request
+
+towns - new routes have been added to get and post Hub Info
+	existing town route for create Town has been modified to include Hub Info
 
 
 
