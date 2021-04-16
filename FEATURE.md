@@ -6,7 +6,16 @@ The 3 main features of our project are:
 2. User tries to go to private Hub
 3. User Isolation from Covey.Town
 
+
+When a user creates a new town, 7 hubs will automatically be created: Houses 1 to 5(Private) and Public School and Hospital.
+![image](https://user-images.githubusercontent.com/41226737/114965216-2de3d900-9e3e-11eb-9f5a-9ec732d7a2a4.png)
+
+
 ## 1. User tries to go to public Hub (School and Hospital are public hubs)
+
+![image](https://user-images.githubusercontent.com/41226737/114965283-4a801100-9e3e-11eb-9cb3-8ac94d0687d2.png)
+Interior of Hospital
+
 
 ### 1-A. Feature
 
@@ -28,6 +37,9 @@ Ensure the Covey.Town user is able to
 5. Exit Hub
 
 ## 2. User tries to go to private Hub (All houses in Covey.Town are private hubs)
+
+![image](https://user-images.githubusercontent.com/41226737/114965439-9337ca00-9e3e-11eb-89c4-fe94558f5d4d.png)
+Asks for password if user tries to enter private hub.
 
 ### 2-A. Feature
 
